@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pequeno Cesar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <p>
+        Welcome to the home page, below is a list of the methods of this API.
+    </p>
+  {% for number in range(10) %}
+    <div class="number_list">{{ number }}</div>
+  {% endfor %}
+</body>
+</html>
