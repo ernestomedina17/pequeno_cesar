@@ -16,12 +16,11 @@ def create_tables():
 def home():
     return render_template('index.html')
 
+
 # Imagine this API provides the resources to create this web site: https://mexico.littlecaesars.com/productos
 
 # Food endpoints
-#  pizza: crazy curnch, pepperoni clasica, 3 meat treat, ultimate supreme, hula hawaiian, queso, deep!deep! dish
-#  complementos: crazy bread relleno, crazy bread, italian cheese bread, caesar wings
-# api.add_resource(Product, '/product/<string:name>')
+# api.add_resource(Product, '/product')
 # api.add_resource(Products, '/products')
 
 #  paquetes: comida completa, fiesta, crazy_combo
@@ -41,4 +40,5 @@ def home():
 # api.add_resource(TokenRefresh, '/refresh')              # Refresh the token
 
 # TODO: Run this app with uWSGI + Nginx
-app.run(host='0.0.0.0', port=8080, debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080, debug=True)
