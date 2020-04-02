@@ -1,4 +1,4 @@
-from neomodel import db, config, StructuredNode, StringProperty, IntegerProperty, FloatProperty
+from neomodel import db, config, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty
 
 config.DATABASE_URL = 'bolt://neo4j:qwerty99@localhost:7687'
 
@@ -8,10 +8,15 @@ class Product(StructuredNode):
     price = FloatProperty(required=True)
     CATEGORIES = {'Pizza': 'Pizza', 'Complement': 'Complement', 'Drink': 'Drink'}
     category = StringProperty(required=True, choices=CATEGORIES)
+    ingredients = ArrayProperty(StringProperty(), required=True)
     units = IntegerProperty(index=True, default=1)
 
     def json(self):
-        return {'name': self.name, 'price': self.price, 'category': self.category, 'units': self.units}
+        return {'name': self.name,
+                'price': self.price,
+                'category': self.category,
+                'ingredients': [ingredient for ingredient in self.ingredients],
+                'units': self.units}
 
     @classmethod
     def find_by_name(cls, name):

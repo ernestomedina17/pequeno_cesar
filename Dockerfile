@@ -13,7 +13,7 @@ RUN addgroup --system "${APP_GROUP}" -g 1000 && adduser --system --no-create-hom
     && pip install -U pip \
     && pip install -r "${APP_HOME}"/requirements.txt
 
-EXPOSE 8080
+EXPOSE 5000
 USER "${APP_USER}":"${APP_GROUP}"
 WORKDIR "${APP_HOME}"
 ENTRYPOINT ["python", "app.py"]

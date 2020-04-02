@@ -1,15 +1,11 @@
 from flask import Flask, render_template
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
+from resources.products import ProductEndpoint
 
 app = Flask(__name__)
 api = Api(app)
 jwt = JWTManager(app)
-
-
-@app.before_first_request
-def create_tables():
-    pass
 
 
 @app.route('/')
@@ -17,10 +13,8 @@ def home():
     return render_template('index.html')
 
 
-# Imagine this API provides the resources to create this web site: https://mexico.littlecaesars.com/productos
-
 # Food endpoints
-# api.add_resource(Product, '/product')
+api.add_resource(ProductEndpoint, '/product')
 # api.add_resource(Products, '/products')
 
 #  paquetes: comida completa, fiesta, crazy_combo
@@ -41,4 +35,4 @@ def home():
 
 # TODO: Run this app with uWSGI + Nginx
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

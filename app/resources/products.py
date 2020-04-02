@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from app.models.products import Product
+from models.products import Product
 from flask_jwt import jwt_required
 
 
@@ -24,8 +24,9 @@ class ProductEndpoint(Resource):
                         choices=('Pizza', 'Complement', 'Drink', 'Sauce'),
                         help='Bad choice: {error_msg}')
     parser.add_argument('ingredients',
-                        type=str,
+                        type=list,
                         required=True,
+                        location='json',
                         help='A product cannot have a blank list of ingredients')
     parser.add_argument('units',
                         type=int,
@@ -41,9 +42,11 @@ class ProductEndpoint(Resource):
         else:
             product.price = data['price']
             product.category = data['category']
+            product.ingredients = data['ingredients']
             product.units = data['units']
 
         product.save_to_db()
+        product.refresh()
         return product.json()
 
     def get(self):

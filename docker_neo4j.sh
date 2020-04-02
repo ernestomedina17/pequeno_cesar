@@ -23,3 +23,5 @@ docker run \
     --env NEO4J_dbms_memory_heap_max__size=2G \
     neo4j:3.3.9
 
+# sleep 5
+# ./venv/bin/neomodel_install_labels app.py app.models --db bolt://neo4j:qwerty99@localhost:7687
