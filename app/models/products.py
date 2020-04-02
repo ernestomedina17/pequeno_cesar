@@ -29,3 +29,9 @@ class Product(StructuredNode):
     @db.transaction
     def delete_from_db(self):
         self.delete()
+
+
+class Products:
+    @classmethod
+    def json(cls):
+        return {"products": [product.json() for product in Product.nodes.all()]}

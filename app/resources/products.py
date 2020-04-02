@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from models.products import Product
+from models.products import Product, Products
 from flask_jwt import jwt_required
 
 
@@ -85,6 +85,6 @@ class ProductEndpoint(Resource):
 
 
 # Retrieve a list of all the products
-class Products(Resource):
+class ProductsEndpoint(Resource):
     def get(self):
-        pass
+        return Products.json()

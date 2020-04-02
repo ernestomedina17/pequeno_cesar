@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
-from resources.products import ProductEndpoint
+from resources.products import ProductEndpoint, ProductsEndpoint
 
 app = Flask(__name__)
 api = Api(app)
@@ -14,8 +14,8 @@ def home():
 
 
 # Food endpoints
-api.add_resource(ProductEndpoint, '/product')
-# api.add_resource(Products, '/products')
+api.add_resource(ProductEndpoint, '/product')       # PUT, GET & DELETE
+api.add_resource(ProductsEndpoint, '/products')     # GET
 
 #  paquetes: comida completa, fiesta, crazy_combo
 # api.add_resource(Package, '/package/<string:name>')
