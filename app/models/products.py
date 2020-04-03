@@ -28,8 +28,8 @@ class Product(StructuredNode):
 # Product category classes
 class Pizza(Product):
     ingredients = ArrayProperty(StringProperty(), required=True)
-    PIZZA_FORMS = {"REDONDA": "REDONDA", "CUADRADA": "CUADRADA"}
-    form = StringProperty(required=True, choices=PIZZA_FORMS)
+    # PIZZA_FORMS = {"REDONDA": "REDONDA", "CUADRADA": "CUADRADA"}
+    form = StringProperty(required=True, choices={"REDONDA": "REDONDA", "CUADRADA": "CUADRADA"})
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
     def json(self):
@@ -56,6 +56,7 @@ class Complement(Product):
 class Drink(Product):
     brand = StringProperty(required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
+    litres = FloatProperty(required=True)
 
 
 class Sauce(Product):

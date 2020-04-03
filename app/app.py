@@ -22,8 +22,8 @@ def home():
     return render_template('index.html')
 
 
-# Food endpoints
-#api.add_resource(ProductEndpoint, '/product')  # PUT, GET & DELETE
+# Valid product categories are: Pizza, Complement, Drink, Sauce and Package
+api.add_resource(ProductEndpoint, '/product/<str:category>')  # PUT, GET & DELETE
 #api.add_resource(ProductsEndpoint, '/products')  # GET
 
 # Package endpoints

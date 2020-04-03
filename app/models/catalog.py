@@ -104,30 +104,34 @@ class Catalog:
                                 "BBQ"]).save()
 
         # noinspection PyTypeChecker
-        Drink.get_or_create(
+        Drink.create_or_update(
             {
                 "name": "Pepsi",
                 "units": 1,
                 "price": 18.00,
-                "brand": "PEPSI"
+                "brand": "PEPSI",
+                "litres": 2
             },
             {
                 "name": "Mirinda",
                 "units": 1,
                 "price": 18.50,
-                "brand": "PEPSI"
+                "brand": "PEPSI",
+                "litres": 2
             },
             {
                 "name": "Manzana",
                 "units": 1,
                 "price": 18.50,
-                "brand": "PEPSI"
+                "brand": "PEPSI",
+                "litres": 2
             },
             {
                 "name": "Any",
                 "units": 1,
                 "price": 18,
-                "brand": "PEPSI"
+                "brand": "PEPSI",
+                "litres": 2
             }
         )
 
