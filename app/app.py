@@ -23,7 +23,7 @@ def home():
 
 
 # Valid product categories are: Pizza, Complement, Drink, Sauce and Package
-api.add_resource(ProductEndpoint, '/product/<str:category>')  # PUT, GET & DELETE
+api.add_resource(ProductEndpoint, '/product/<string:category>')  # PUT, GET & DELETE
 
 # Return all the products
 api.add_resource(ProductsEndpoint, '/products')  # GET
