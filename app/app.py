@@ -3,7 +3,6 @@ from flask_jwt_extended import JWTManager
 from flask_restful import Api
 from neomodel import config
 from resources.products import ProductEndpoint, ProductsEndpoint
-from resources.packages import PackageEndpoint, PackagesEndpoint
 from models.catalog import Catalog
 
 app = Flask(__name__)
@@ -24,12 +23,12 @@ def home():
 
 
 # Food endpoints
-api.add_resource(ProductEndpoint, '/product')  # PUT, GET & DELETE
-api.add_resource(ProductsEndpoint, '/products')  # GET
+#api.add_resource(ProductEndpoint, '/product')  # PUT, GET & DELETE
+#api.add_resource(ProductsEndpoint, '/products')  # GET
 
 # Package endpoints
-api.add_resource(PackageEndpoint, '/package')
-api.add_resource(PackagesEndpoint, '/packages')
+#api.add_resource(PackageEndpoint, '/package')
+#api.add_resource(PackagesEndpoint, '/packages')
 
 #  Tiendas
 # api.add_resource(Store, '/store/<int:user_id>')

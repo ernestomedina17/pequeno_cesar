@@ -1,6 +1,10 @@
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
-                      RelationshipTo, RelationshipFrom)
-from models.relationships import HasPizzaRel, HasComplementRel, HasDrinkRel, HasSauceRel
+                      RelationshipTo, RelationshipFrom, StructuredRel)
+
+
+class Has(StructuredRel):
+    units = IntegerProperty(required=True)
+
 
 class Product(StructuredNode):
     __abstract_node__ = True
@@ -24,8 +28,9 @@ class Product(StructuredNode):
 # Product category classes
 class Pizza(Product):
     ingredients = ArrayProperty(StringProperty(), required=True)
-    form = StringProperty(required=False, choices={'R': 'REDONDA', 'C': 'CUADRADA'}, default='R')
-    rel_package = RelationshipFrom('Package', 'HAS', cardinality='ZeroOrMore', model=HasPizzaRel)
+    PIZZA_FORMS = {"REDONDA": "REDONDA", "CUADRADA": "CUADRADA"}
+    form = StringProperty(required=True, choices=PIZZA_FORMS)
+    rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
     def json(self):
         return {'name': self.name,
@@ -38,7 +43,7 @@ class Pizza(Product):
 class Complement(Product):
     description = StringProperty(required=True)
     ingredients = ArrayProperty(StringProperty(), required=True)
-    rel_package = RelationshipFrom('Package', 'HAS', cardinality='ZeroOrMore', model=HasComplementRel)
+    rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
     def json(self):
         return {'name': self.name,
@@ -50,12 +55,12 @@ class Complement(Product):
 
 class Drink(Product):
     brand = StringProperty(required=True)
-    rel_package = RelationshipFrom('Package', 'HAS', cardinality='ZeroOrMore', model=HasDrinkRel)
+    rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
 
 class Sauce(Product):
     description = StringProperty(required=True)
-    rel_package = RelationshipFrom('Package', 'HAS', cardinality='ZeroOrMore', model=HasSauceRel)
+    rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
 
 class Package(Product):
@@ -63,10 +68,12 @@ class Package(Product):
     complements = ArrayProperty(StringProperty())
     drinks = ArrayProperty(StringProperty())
     sauces = ArrayProperty(StringProperty())
-    rel_pizza = RelationshipTo('Pizza', 'HAS', cardinality='ZeroOrMore', model=HasPizzaRel)
-    rel_complement = RelationshipTo('Complement', 'HAS', cardinality='ZeroOrMore', model=HasComplementRel)
-    rel_drink = RelationshipTo('Drink', 'HAS', cardinality='ZeroOrMore', model=HasDrinkRel)
-    rel_sauce = RelationshipTo('Sauce', 'HAS', cardinality='ZeroOrMore', model=HasSauceRel)
+    rel_pizza = RelationshipTo('Pizza', 'HAS', model=Has)
+    rel_complement = RelationshipTo('Complement', 'HAS', model=Has)
+    rel_drink = RelationshipTo('Drink', 'HAS', model=Has)
+    rel_sauce = RelationshipTo('Sauce', 'HAS', model=Has)
+
+
 
 
 #class Products:
