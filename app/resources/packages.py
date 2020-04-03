@@ -1,39 +1,26 @@
 from flask_restful import Resource, reqparse
-from models.products import Pizza, Complement, Drink, Sauce, Package
+from models.products import Product, Products
 from flask_jwt import jwt_required
 
 
 # CRUD Product - API Endpoint
-class ProductEndpoint(Resource):
-
+class PackageEndpoint(Resource):
+    #  paquetes: comida completa, fiesta, crazy_combo
     def put(self):
         parser = reqparse.RequestParser()
-        #  pizza: crazy crunch, pepperoni clasica, 3 meat treat, ultimate supreme, hula hawaiian, queso, deep!deep! dish
-        #  complementos: crazy bread relleno, crazy bread, italian cheese bread, caesar wings
-        #  drinks: pepsi 2L
-        #  salsas: crazy sauce
         parser.add_argument('name',
                             type=str,
                             required=True,
-                            help='A product cannot have a blank name')
+                            help='A package cannot have a blank name')
         parser.add_argument('price',
                             type=float,
                             required=True,
-                            help='A product cannot have a blank price')
-        parser.add_argument('category',
-                            type=str,
-                            required=True,
-                            choices=('Pizza', 'Complement', 'Drink', 'Sauce'),
-                            help='Bad choice: {error_msg}')
-        parser.add_argument('ingredients',
+                            help='A package cannot have a blank price')
+        parser.add_argument('products',
                             type=list,
                             required=True,
                             location='json',
-                            help='A product cannot have a blank list of ingredients')
-        parser.add_argument('units',
-                            type=int,
-                            required=False,
-                            help='Set the quantity of units')
+                            help='A package cannot have a blank list of products')
 
         data = parser.parse_args()
         product = Product.find_by_name(data['name'])
@@ -85,6 +72,6 @@ class ProductEndpoint(Resource):
 
 
 # Retrieve a list of all the products
-class ProductsEndpoint(Resource):
+class PackagesEndpoint(Resource):
     def get(self):
         return Products.json()

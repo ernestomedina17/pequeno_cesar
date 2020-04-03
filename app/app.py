@@ -1,11 +1,21 @@
 from flask import Flask, render_template
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
+from neomodel import config
 from resources.products import ProductEndpoint, ProductsEndpoint
+from resources.packages import PackageEndpoint, PackagesEndpoint
+from models.catalog import Catalog
 
 app = Flask(__name__)
 api = Api(app)
 jwt = JWTManager(app)
+
+config.DATABASE_URL = 'bolt://neo4j:qwerty99@localhost:7687'
+
+
+@app.before_first_request
+def load_catalog():
+    Catalog.load()
 
 
 @app.route('/')
@@ -14,12 +24,12 @@ def home():
 
 
 # Food endpoints
-api.add_resource(ProductEndpoint, '/product')       # PUT, GET & DELETE
-api.add_resource(ProductsEndpoint, '/products')     # GET
+api.add_resource(ProductEndpoint, '/product')  # PUT, GET & DELETE
+api.add_resource(ProductsEndpoint, '/products')  # GET
 
-#  paquetes: comida completa, fiesta, crazy_combo
-# api.add_resource(Package, '/package/<string:name>')
-# api.add_resource(Packages, '/packages')
+# Package endpoints
+api.add_resource(PackageEndpoint, '/package')
+api.add_resource(PackagesEndpoint, '/packages')
 
 #  Tiendas
 # api.add_resource(Store, '/store/<int:user_id>')
