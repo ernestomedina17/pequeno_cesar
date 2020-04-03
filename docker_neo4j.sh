@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-# sudo docker pull neo4j:4.0.2
+IMAGE_VERSION='neo4j:3.3.9'
+# Add your user to the docker group, and re-login
+docker pull ${IMAGE_VERSION}
+
+### OPTIONAL ARGs
 # mkdir -p $HOME/neo4j/{data,logs,import,plugins,conf}
-# Add your user to the docker group so you don't need to use sudo
-# OPTIONAL ARGs
 #   --env NEO4J_dbms_connectors_default__listen__address='0.0.0.0' \
 #    -v $HOME/neo4j/data:/data \
 #    -v $HOME/neo4j/logs:/logs \
@@ -19,8 +21,9 @@ docker run \
     --env NEO4J_AUTH=neo4j/qwerty99 \
     --env NEO4J_dbms_memory_pagecache_size=2G \
     --env NEO4J_dbms_memory_heap_max__size=2G \
-    neo4j:3.3.9
+    ${IMAGE_VERSION}
 
-# sleep 5
-# ./venv/bin/neomodel_install_labels app.py app.models --db 'bolt://neo4j:qwerty99@localhost:7687'
+sleep 5
+curl http://localhost:5000  # Catalog.load functions get trigger
+./venv/bin/neomodel_install_labels app.py app.models --db 'bolt://neo4j:qwerty99@localhost:7687'
 
