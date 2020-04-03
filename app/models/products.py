@@ -66,7 +66,7 @@ class Drink(Product):
         return {'name': self.name,
                 'price': self.price,
                 'units': self.units,
-                'brand': self.description,
+                'brand': self.brand,
                 'litres': self.litres}
 
 
@@ -95,17 +95,17 @@ class Package(Product):
         return {'name': self.name,
                 'price': self.price,
                 'units': self.units,
-                'pizzas': [pizza for pizza in self.pizzas],
-                'complements': [complement for complement in self.complements],
-                'drinks': [drink for drink in self.drinks],
-                'sauces': [sauce for sauce in self.sauces]}
+                'pizzas':       [name_pizza for name_pizza in self.pizzas],
+                'complements':  [name_compl for name_compl in self.complements],
+                'drinks':       [name_drink for name_drink in self.drinks],
+                'sauces':       [name_sauce for name_sauce in self.sauces]}
 
 
 class Products:
     @classmethod
     def json(cls):
-        return {"pizzas": [pizza.json() for pizza in Pizza.nodes.all()],
-                "complements": [complement.json() for complement in Complement.nodes.all()],
-                "drinks": [drink.json() for drink in Drink.nodes.all()],
-                "sauces": [sauce.json() for sauce in Sauce.nodes.all()],
-                "packages": [package.json() for package in Package.nodes.all()]}
+        return {"Pizzas": [pizza.json() for pizza in Pizza.nodes.all()],
+                "Complements": [complement.json() for complement in Complement.nodes.all()],
+                "Drinks": [drink.json() for drink in Drink.nodes.all()],
+                "Sauces": [sauce.json() for sauce in Sauce.nodes.all()],
+                "Packages": [package.name for package in Package.nodes.all()]}

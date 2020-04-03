@@ -14,7 +14,8 @@ config.DATABASE_URL = 'bolt://neo4j:qwerty99@localhost:7687'
 
 @app.before_first_request
 def load_catalog():
-    Catalog.load()
+    Catalog.load_nodes()
+    Catalog.load_relations()
 
 
 @app.route('/')
