@@ -1,14 +1,43 @@
 from werkzeug.security import safe_str_cmp
 from flask_restful import Resource, reqparse
-from models.products import Pizza, Complement, Drink, Sauce, Package
+from models.products import Pizza, Complement, Drink, Sauce, Package, Products
 from flask_jwt import jwt_required
+
+
+def validate_category(category):
+    parser = reqparse.RequestParser()
+    parser.add_argument('name',
+                        type=str,
+                        required=True,
+                        help='A product cannot have a blank name')
+
+    data = parser.parse_args()
+
+    if safe_str_cmp(category, 'Pizza'):
+        product = Pizza.find_by_name(data['name'])
+
+    elif safe_str_cmp(category, 'Complement'):
+        product = Complement.find_by_name(data['name'])
+
+    elif safe_str_cmp(category, 'Drink'):
+        product = Drink.find_by_name(data['name'])
+
+    elif safe_str_cmp(category, 'Sauce'):
+        product = Sauce.find_by_name(data['name'])
+
+    elif safe_str_cmp(category, 'Package'):
+        product = Package.find_by_name(data['name'])
+
+    else:
+        return None, None
+
+    return product, data
 
 
 # CRUD Product - API Endpoint
 class ProductEndpoint(Resource):
 
     def put(self, category):
-        product = None
         parser = reqparse.RequestParser()
         parser.add_argument('name',
                             type=str,
@@ -149,35 +178,19 @@ class ProductEndpoint(Resource):
         return product.json()
 
     def get(self, category):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name',
-                            type=str,
-                            required=True,
-                            help='A product cannot have a blank name')
-
-        data = parser.parse_args()
-        product = Product.find_by_name(data['name'])
-
+        product, data = validate_category(category)
         if product is None:
-            return {'message': "The product '{}' does not exist".format(data["name"])}
-
+            return {'message': "The product '{}' does not exist".format(data["name"])}, 400
         return product.json()
 
     def delete(self, category):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name',
-                            type=str,
-                            required=True,
-                            help='A product cannot have a blank name')
-
-        data = parser.parse_args()
-        product = Product.find_by_name(data['name'])
-
-        if product is None:
-            return {'message': "The product '{}' does not exist or has already been deleted".format(data["name"])}
+        product, data = validate_category(category)
+        if product is None and data is None:
+            return {'message': 'Invalid category name'}, 400
+        elif product is None and data is not None:
+            return {'message': "The product '{}' does not exist or has already been deleted".format(data["name"])}, 400
         else:
             product.delete_from_db()
-
         return {'message': "The product '{}' has been deleted".format(data["name"])}
 
 

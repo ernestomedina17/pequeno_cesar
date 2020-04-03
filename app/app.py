@@ -24,11 +24,9 @@ def home():
 
 # Valid product categories are: Pizza, Complement, Drink, Sauce and Package
 api.add_resource(ProductEndpoint, '/product/<str:category>')  # PUT, GET & DELETE
-#api.add_resource(ProductsEndpoint, '/products')  # GET
 
-# Package endpoints
-#api.add_resource(PackageEndpoint, '/package')
-#api.add_resource(PackagesEndpoint, '/packages')
+# Return all the products
+api.add_resource(ProductsEndpoint, '/products')  # GET
 
 #  Tiendas
 # api.add_resource(Store, '/store/<int:user_id>')
@@ -42,6 +40,6 @@ api.add_resource(ProductEndpoint, '/product/<str:category>')  # PUT, GET & DELET
 # api.add_resource(UserLogout, '/logout')                 # Blacklist the token, not user
 # api.add_resource(TokenRefresh, '/refresh')              # Refresh the token
 
-# TODO: Run this app with uWSGI + Nginx
+# TODO: Run this app with uWSGI + Nginx in a Docker container
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

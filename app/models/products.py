@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
                       RelationshipTo, RelationshipFrom, StructuredRel)
 
@@ -24,6 +25,9 @@ class Product(StructuredNode):
     def delete_from_db(self):
         self.delete()
 
+    @abstractmethod
+    def json(self):
+        pass
 
 # Product category classes
 class Pizza(Product):
@@ -55,13 +59,26 @@ class Complement(Product):
 
 class Drink(Product):
     brand = StringProperty(required=True)
-    rel_package = RelationshipFrom('Package', 'HAS', model=Has)
     litres = FloatProperty(required=True)
+    rel_package = RelationshipFrom('Package', 'HAS', model=Has)
+
+    def json(self):
+        return {'name': self.name,
+                'price': self.price,
+                'units': self.units,
+                'brand': self.description,
+                'litres': self.litres}
 
 
 class Sauce(Product):
     description = StringProperty(required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
+
+    def json(self):
+        return {'name': self.name,
+                'price': self.price,
+                'units': self.units,
+                'description': self.description}
 
 
 class Package(Product):
@@ -74,10 +91,21 @@ class Package(Product):
     rel_drink = RelationshipTo('Drink', 'HAS', model=Has)
     rel_sauce = RelationshipTo('Sauce', 'HAS', model=Has)
 
+    def json(self):
+        return {'name': self.name,
+                'price': self.price,
+                'units': self.units,
+                'pizzas': [pizza for pizza in self.pizzas],
+                'complements': [complement for complement in self.complements],
+                'drinks': [drink for drink in self.drinks],
+                'sauces': [sauce for sauce in self.sauces]}
 
 
-
-#class Products:
-#    @classmethod
-#    def json(cls):
-#        return {"products": [product.json() for product in Product.nodes.all()]}
+class Products:
+    @classmethod
+    def json(cls):
+        return {"pizzas": [pizza.json() for pizza in Pizza.nodes.all()],
+                "complements": [complement.json() for complement in Complement.nodes.all()],
+                "drinks": [drink.json() for drink in Drink.nodes.all()],
+                "sauces": [sauce.json() for sauce in Sauce.nodes.all()],
+                "packages": [package.json() for package in Package.nodes.all()]}
