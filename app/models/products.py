@@ -89,6 +89,7 @@ class Drink(Product):
     brand = StringProperty(required=True)
     litres = FloatProperty(required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
+    litres = FloatProperty(required=True)
 
     def json(self):
         return {'name': self.name,
