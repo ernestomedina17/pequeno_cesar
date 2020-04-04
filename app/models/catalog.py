@@ -152,7 +152,7 @@ class Catalog:
             {"name": "Paquete Fiesta",
              "units": 1,
              "price": 200,
-             "pizzas": ["Pepperoni Clásica", "Pepperoni Clásica"],
+             "pizzas": ["Pepperoni Clásica"],
              "complements": ["Crazy Bread"],
              "drinks": ["Any"],
              "sauces": ["Crazy Sauce"]},
@@ -162,6 +162,13 @@ class Catalog:
              "pizzas": None,
              "complements": ["Crazy Bread"],
              "drinks": None,
+             "sauces": ["Crazy Sauce"]},
+            {"name": "Ultra Big",
+             "units": 1,
+             "price": 450,
+             "pizzas": ["3 MEAT TREAT", "HULA HAWAIIAN"],
+             "complements": ["Crazy Bread"],
+             "drinks": ["Pepsi", "Mirinda", "Manzana"],
              "sauces": ["Crazy Sauce"]})
 
     @classmethod
@@ -187,3 +194,18 @@ class Catalog:
         pkg_crazy_combo = Package.find_by_name("Crazy Combo")
         pkg_crazy_combo.rel_complement.connect(crazy_bread, {'units': 1}).save()
         pkg_crazy_combo.rel_sauce.connect(crazy_sauce, {'units': 1}).save()
+
+        tree_meat_treat = Pizza.find_by_name("3 MEAT TREAT")
+        hula_hawaiian = Pizza.find_by_name("HULA HAWAIIAN")
+        pepsi = Drink.find_by_name("Pepsi")
+        mirinda = Drink.find_by_name("Mirinda")
+        manzana = Drink.find_by_name("Manzana")
+
+        pkg_fiesta = Package.find_by_name("Ultra Big")
+        pkg_fiesta.rel_pizza.connect(tree_meat_treat, {'units': 2}).save()
+        pkg_fiesta.rel_pizza.connect(hula_hawaiian, {'units': 2}).save()
+        pkg_fiesta.rel_complement.connect(crazy_bread, {'units': 1}).save()
+        pkg_fiesta.rel_drink.connect(pepsi, {'units': 1}).save()
+        pkg_fiesta.rel_drink.connect(mirinda, {'units': 1}).save()
+        pkg_fiesta.rel_drink.connect(manzana, {'units': 1}).save()
+        pkg_fiesta.rel_sauce.connect(crazy_sauce, {'units': 4}).save()
