@@ -23,6 +23,7 @@ class Product(StructuredNode):
     def find_by_name(cls, name):
 =======
 from abc import abstractmethod
+
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
                       RelationshipTo, RelationshipFrom, StructuredRel)
 
