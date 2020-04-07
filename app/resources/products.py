@@ -1,8 +1,8 @@
 from werkzeug.security import safe_str_cmp
 from flask_restful import Resource, reqparse
 from models.products import Pizza, Complement, Drink, Sauce, Package, Products
-from flask_jwt import jwt_required
-
+from flask_jwt_extended import jwt_required
+from security import admin_required
 
 def validate_category(category):
     parser = reqparse.RequestParser()
@@ -37,6 +37,7 @@ def validate_category(category):
 # CRUD Product - API Endpoint
 class ProductEndpoint(Resource):
 
+    @admin_required
     def put(self, category):
         parser = reqparse.RequestParser()
         parser.add_argument('name',
@@ -177,12 +178,14 @@ class ProductEndpoint(Resource):
         product.refresh()
         return product.json()
 
+    @jwt_required
     def get(self, category):
         product, data = validate_category(category)
         if product is None:
             return {'message': "The product '{}' does not exist".format(data["name"])}, 400
         return product.json()
 
+    @admin_required
     def delete(self, category):
         product, data = validate_category(category)
         if product is None and data is None:
@@ -196,5 +199,6 @@ class ProductEndpoint(Resource):
 
 # Retrieve a list of all the products
 class ProductsEndpoint(Resource):
+    @jwt_required
     def get(self):
         return Products.json()

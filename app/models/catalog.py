@@ -1,4 +1,5 @@
 from models.products import Pizza, Complement, Drink, Sauce, Package
+from models.security import User, Administrator
 from neomodel import db
 
 
@@ -209,3 +210,16 @@ class Catalog:
         pkg_fiesta.rel_drink.connect(mirinda, {'units': 1}).save()
         pkg_fiesta.rel_drink.connect(manzana, {'units': 1}).save()
         pkg_fiesta.rel_sauce.connect(crazy_sauce, {'units': 4}).save()
+
+    @classmethod
+    @db.transaction
+    def load_users(cls):
+        # noinspection PyTypeChecker
+        User.get_or_create(
+            {"name": "eduardo",
+             "password": "myUserPassword123"})
+
+        # noinspection PyTypeChecker
+        Administrator.get_or_create(
+            {"name": "ernesto",
+             "password": "myAdminPassword123"})
