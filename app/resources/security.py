@@ -25,5 +25,3 @@ class LoginEndpoint(Resource):
 
         access_token = create_access_token(identity=user)
         return {"access_token": access_token}, 200
-
-

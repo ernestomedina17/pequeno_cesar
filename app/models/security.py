@@ -26,4 +26,3 @@ class Administrator(User):
     @classmethod
     def is_admin(cls):
         return True
-
