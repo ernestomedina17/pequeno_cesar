@@ -23,7 +23,6 @@ class Product(StructuredNode):
     def find_by_name(cls, name):
 =======
 from abc import abstractmethod
-
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
                       RelationshipTo, RelationshipFrom, StructuredRel)
 
@@ -35,7 +34,7 @@ class Has(StructuredRel):
 class Product(StructuredNode):
     __abstract_node__ = True
     name = StringProperty(unique_index=True, required=True)
-    price = FloatProperty(required=True)
+    is_admin = FloatProperty(required=True)
     units = IntegerProperty(index=True, default=1)
 
     @classmethod
