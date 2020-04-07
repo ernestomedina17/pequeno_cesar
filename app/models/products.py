@@ -34,7 +34,7 @@ class Has(StructuredRel):
 class Product(StructuredNode):
     __abstract_node__ = True
     name = StringProperty(unique_index=True, required=True)
-    is_admin = FloatProperty(required=True)
+    price = FloatProperty(required=True)
     units = IntegerProperty(index=True, default=1)
 
     @classmethod
