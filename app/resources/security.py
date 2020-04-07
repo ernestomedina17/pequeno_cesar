@@ -20,10 +20,10 @@ class LoginEndpoint(Resource):
         data = parser.parse_args()
         user = User.find_by_name(data['username'])
 
-        if user or safe_str_cmp(user.password, data['password']):
+        if user is None or not safe_str_cmp(user.password, data['password']):
             return {"msg": "Bad username or password"}, 401
 
         access_token = create_access_token(identity=user)
-        return access_token, 200
+        return {"access_token": access_token}, 200
 
 

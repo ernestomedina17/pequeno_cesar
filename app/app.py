@@ -22,8 +22,8 @@ def user_identity_lookup(user):
 @jwt.user_claims_loader
 def add_claims_to_access_token(user):
     if user.is_admin():
-        return {'role': 'admin'}
-    return {'role': 'peasant'}
+        return {'role': 'admin'}    # PUT, GET & DELETE
+    return {'role': 'consumer'}     # Only GETs
 
 
 @app.before_first_request

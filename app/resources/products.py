@@ -1,7 +1,7 @@
 from werkzeug.security import safe_str_cmp
 from flask_restful import Resource, reqparse
 from models.products import Pizza, Complement, Drink, Sauce, Package, Products
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_claims
 from security import admin_required
 
 
@@ -179,8 +179,15 @@ class ProductEndpoint(Resource):
         product.refresh()
         return product.json()
 
+    # If no Authorization header is sent it throws an error 500, which needs to be handled hopefully by Nginx.
+    # flask_jwt_extended.exceptions.NoAuthorizationError: Missing Authorization Header
     @jwt_required
     def get(self, category):
+
+        claims = get_jwt_claims()
+        if not claims['role']:
+            return {'message': 'No authorization'}, 401
+
         product, data = validate_category(category)
         if product is None:
             return {'message': "The product '{}' does not exist".format(data["name"])}, 400

@@ -6,7 +6,7 @@ class User(StructuredNode):
     password = StringProperty()
 
     @classmethod
-    def find_by_username(cls, name=None):
+    def find_by_name(cls, name=None):
         return cls.nodes.first_or_none(name=name)
 
     @classmethod

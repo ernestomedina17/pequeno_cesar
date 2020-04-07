@@ -13,6 +13,3 @@ def admin_required(fn):
         else:
             return fn(*args, **kwargs)
     return wrapper
-
-
-
