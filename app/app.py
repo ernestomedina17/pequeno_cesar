@@ -1,10 +1,11 @@
 from flask import Flask, render_template
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, get_jwt_claims, verify_jwt_in_request
 from flask_restful import Api
 from neomodel import config
 from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
 from resources.security import LoginEndpoint
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -13,11 +14,24 @@ config.DATABASE_URL = 'bolt://neo4j:qwerty99@localhost:7687'
 jwt = JWTManager(app)
 
 
+@jwt.user_identity_loader
+def user_identity_lookup(user):
+    return user.name
+
+
+@jwt.user_claims_loader
+def add_claims_to_access_token(user):
+    if user.is_admin():
+        return {'role': 'admin'}
+    return {'role': 'peasant'}
+
+
 @app.before_first_request
 def load_catalog():
     Catalog.load_nodes()
     Catalog.load_relations()
     Catalog.load_users()
+
 
 @app.route('/')
 def home():

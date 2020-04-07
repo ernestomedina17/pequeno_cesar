@@ -4,6 +4,7 @@ from models.products import Pizza, Complement, Drink, Sauce, Package, Products
 from flask_jwt_extended import jwt_required
 from security import admin_required
 
+
 def validate_category(category):
     parser = reqparse.RequestParser()
     parser.add_argument('name',

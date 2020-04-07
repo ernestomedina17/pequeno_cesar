@@ -23,7 +23,7 @@ docker run \
     --env NEO4J_dbms_memory_heap_max__size=2G \
     ${IMAGE_VERSION}
 
-sleep 5
-curl http://localhost:5000  # Catalog.load functions get trigger
-./venv/bin/neomodel_install_labels app.py app.models --db 'bolt://neo4j:qwerty99@localhost:7687'
+#sleep 5
+#curl http://localhost:5000  # Catalog.load functions get trigger
+#./venv/bin/neomodel_install_labels app.py app.models --db 'bolt://neo4j:qwerty99@localhost:7687'
 
