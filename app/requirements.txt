@@ -1,5 +1,4 @@
 Flask
 Flask-RESTful
-Flask-JWT
 Flask-JWT-Extended
 neomodel
