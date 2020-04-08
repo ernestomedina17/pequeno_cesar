@@ -15,7 +15,7 @@ docker pull ${IMAGE_VERSION}
 
 docker run \
     --name pequeno_cesar_db \
-    -p 7474:7474 -p 7687:7687 \
+    -p 172.17.0.1:7474:7474 -p 172.17.0.1:7687:7687 \
     --rm \
     -d \
     --env NEO4J_AUTH=neo4j/qwerty99 \

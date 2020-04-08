@@ -10,7 +10,7 @@ from resources.security import LoginEndpoint
 app = Flask(__name__)
 api = Api(app)
 app.config['JWT_SECRET_KEY'] = 'this-123-is-MY-super-secret-432-KEY-@@@###'
-config.DATABASE_URL = 'bolt://neo4j:qwerty99@localhost:7687'
+config.DATABASE_URL = 'bolt://neo4j:qwerty99@172.17.0.1:7687'
 jwt = JWTManager(app)
 
 
