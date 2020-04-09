@@ -1,8 +1,4 @@
 Flask
 Flask-RESTful
-<<<<<<< HEAD
-Flask-JWT
-=======
->>>>>>> 7aa93a5445c9ddec183559c448340e9a5aca848c
 Flask-JWT-Extended
 neomodel

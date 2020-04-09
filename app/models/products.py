@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-from neomodel import db, config, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty
-
-config.DATABASE_URL = 'bolt://neo4j:qwerty99@localhost:7687'
-
-
-class Product(StructuredNode):
-    name = StringProperty(unique_index=True, required=True)
-    price = FloatProperty(required=True)
-    CATEGORIES = {'Pizza': 'Pizza', 'Complement': 'Complement', 'Drink': 'Drink'}
-    category = StringProperty(required=True, choices=CATEGORIES)
-    ingredients = ArrayProperty(StringProperty(), required=True)
-    units = IntegerProperty(index=True, default=1)
-
-    def json(self):
-        return {'name': self.name,
-                'price': self.price,
-                'category': self.category,
-                'ingredients': [ingredient for ingredient in self.ingredients],
-                'units': self.units}
-
-    @classmethod
-    def find_by_name(cls, name):
-=======
 from abc import abstractmethod
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
                       RelationshipTo, RelationshipFrom, StructuredRel)
@@ -39,7 +15,6 @@ class Product(StructuredNode):
 
     @classmethod
     def find_by_name(cls, name=None):
->>>>>>> 7aa93a5445c9ddec183559c448340e9a5aca848c
         return cls.nodes.first_or_none(name=name)
 
     @db.transaction
@@ -49,8 +24,6 @@ class Product(StructuredNode):
     @db.transaction
     def delete_from_db(self):
         self.delete()
-<<<<<<< HEAD
-=======
 
     @abstractmethod
     def json(self):
@@ -89,7 +62,6 @@ class Drink(Product):
     brand = StringProperty(required=True)
     litres = FloatProperty(required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
-    litres = FloatProperty(required=True)
 
     def json(self):
         return {'name': self.name,
@@ -161,4 +133,3 @@ class Products:
                 "Drinks": [drink.json() for drink in Drink.nodes.all()],
                 "Sauces": [sauce.json() for sauce in Sauce.nodes.all()],
                 "Packages": [package.json() for package in Package.nodes.all()]}
->>>>>>> 7aa93a5445c9ddec183559c448340e9a5aca848c
