@@ -15,6 +15,6 @@ class UserEndpoint(Resource):
         pass
 
     @admin_required
-    @jwt_refresh_token_required()
+    @jwt_refresh_token_required
     def get(self):
         pass

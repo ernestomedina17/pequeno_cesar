@@ -1,4 +1,3 @@
-from app import blacklist
 from flask_jwt_extended import (create_access_token, jwt_refresh_token_required, get_jwt_identity,
                                 create_refresh_token, get_raw_jwt, jwt_required, fresh_jwt_required)
 from flask_restful import Resource, reqparse
@@ -48,20 +47,3 @@ class RefreshTokenEndpoint(Resource):
         current_user = get_jwt_identity()
         return {'access_token': create_access_token(identity=current_user, fresh=False)}, 200
 
-
-# Blacklist Fresh
-class LogoutEndpoint(Resource):
-    @jwt_required
-    def post(self):
-        jti = get_raw_jwt()['jti']
-        blacklist.add(jti)
-        return {"message": "Successfully logged out"}, 200
-
-
-# Blacklist Non Fresh
-class LogoutRefreshEndpoint(Resource):
-    @jwt_refresh_token_required
-    def post(self):
-        jti = get_raw_jwt()['jti']
-        blacklist.add(jti)
-        return {"message": "Successfully logged out"}, 200

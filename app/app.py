@@ -1,11 +1,10 @@
 from flask import Flask, render_template
-from flask_jwt_extended import JWTManager
-from flask_restful import Api
+from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
+from flask_restful import Api, Resource
 from neomodel import config
 from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
-from resources.security import LoginEndpoint, LogoutEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint, \
-    LogoutRefreshEndpoint
+from resources.security import LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 from resources.users import UserEndpoint
 
 app = Flask(__name__)
@@ -96,6 +95,24 @@ api.add_resource(ProductEndpoint, '/product/<string:category>')  # PUT, GET & DE
 api.add_resource(ProductsEndpoint, '/products')  # GET
 
 # User and Security endpoints
+# Blacklist Fresh
+class LogoutEndpoint(Resource):
+    @jwt_required
+    def post(self):
+        jti = get_raw_jwt()['jti']
+        blacklist.add(jti)
+        return {"message": "Successfully logged out"}, 200
+
+
+# Blacklist Non Fresh
+class LogoutRefreshEndpoint(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        jti = get_raw_jwt()['jti']
+        blacklist.add(jti)
+        return {"message": "Successfully logged out"}, 200
+
+
 # Users can GET, Admins can PUT, GET and DELETE.
 api.add_resource(LoginEndpoint, '/login')  # Gives back a fresh token
 api.add_resource(RefreshableTokenEndpoint, '/refreshable')  # Gives back a refreshable token using a fresh token
