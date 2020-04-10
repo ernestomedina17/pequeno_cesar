@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, after_this_request
 from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
 from flask_restful import Api, Resource
 from models.security import User
@@ -35,18 +35,18 @@ def add_claims_to_access_token(username):
     if user is None:
         return None
     if user.is_admin():
-        return {'role': 'admin'}    # PUT, GET & DELETE
-    return {'role': 'consumer'}     # Only GETs
+        return {'role': 'admin'}  # PUT, GET & DELETE
+    return {'role': 'consumer'}  # Only GETs
 
 
 @jwt.expired_token_loader
 def my_expired_token_callback(expired_token):
     token_type = expired_token['type']
     return {
-        'status': 401,
-        'sub_status': 42,
-        'msg': 'The {} token has expired'.format(token_type)
-    }, 401
+               'status': 401,
+               'sub_status': 42,
+               'msg': 'The {} token has expired'.format(token_type)
+           }, 401
 
 
 @jwt.invalid_token_loader
@@ -73,7 +73,7 @@ def revoked_token_callback():
             'error': 'token_revoked'}, 401
 
 
-# TODO: Persist Blacklisted tokens into Neo4j
+# TODO: Persist Blacklisted tokens into Neo4j or Redis
 blacklist = set()
 
 
@@ -100,6 +100,7 @@ api.add_resource(ProductEndpoint, '/product/<string:category>')  # PUT, GET & DE
 
 # Return all the products
 api.add_resource(ProductsEndpoint, '/products')  # GET
+
 
 # User and Security endpoints
 # Blacklist Fresh

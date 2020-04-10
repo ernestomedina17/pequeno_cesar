@@ -613,10 +613,8 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
-							"pm.test(\"Token is not empty\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
-							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -659,10 +657,8 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
-							"pm.test(\"Token is not empty\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
-							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1249,10 +1245,8 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
-							"pm.test(\"Token is not empty\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
-							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1295,10 +1289,8 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
-							"pm.test(\"Token is not empty\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
-							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
 							"});"
 						],
 						"type": "text/javascript"
