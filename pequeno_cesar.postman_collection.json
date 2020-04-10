@@ -88,8 +88,8 @@
 						"exec": [
 							"pm.test(\"Token is not empty\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
-							"    pm.environment.set(\"token\", jsonData.access_token);",
+							"    pm.expect(jsonData.fresh_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"fresh_token\", jsonData.fresh_token);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -124,7 +124,99 @@
 			"response": []
 		},
 		{
-			"name": "/product/Pizza Expired Bearer Token",
+			"name": "/refreshable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Token is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.refresh_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{fresh_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/refreshable",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"refreshable"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Token is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{refresh_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/refresh",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"refresh"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/product/Pizza Bad Bearer Token",
 			"event": [
 				{
 					"listen": "test",
@@ -203,7 +295,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -254,7 +346,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -305,7 +397,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -349,7 +441,7 @@
 					{
 						"key": "Authorization",
 						"type": "text",
-						"value": "Bearer {{token}}"
+						"value": "Bearer {{access_token}}"
 					}
 				],
 				"url": {
@@ -394,7 +486,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -442,7 +534,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -491,7 +583,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{access_token}}",
 						"type": "text"
 					}
 				],
@@ -523,8 +615,8 @@
 						"exec": [
 							"pm.test(\"Token is not empty\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
-							"    pm.environment.set(\"token\", jsonData.access_token);",
+							"    pm.expect(jsonData.fresh_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"fresh_token\", jsonData.fresh_token);",
 							"});",
 							"",
 							"pm.test(\"Response time is less than 200ms\", function () {",
@@ -563,6 +655,98 @@
 			"response": []
 		},
 		{
+			"name": "/refreshable Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Token is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.refresh_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{fresh_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/refreshable",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"refreshable"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/refresh Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Token is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{refresh_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/refresh",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"refresh"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
 			"name": "/product/Pizza",
 			"event": [
 				{
@@ -588,7 +772,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{fresh_token}}",
 						"type": "text"
 					}
 				],
@@ -640,7 +824,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{fresh_token}}",
 						"type": "text"
 					}
 				],
@@ -691,7 +875,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{fresh_token}}",
 						"type": "text"
 					}
 				],
@@ -739,7 +923,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{fresh_token}}",
 						"type": "text"
 					}
 				],
@@ -787,7 +971,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{fresh_token}}",
 						"type": "text"
 					}
 				],
@@ -843,7 +1027,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
+						"value": "Bearer {{fresh_token}}",
 						"type": "text"
 					}
 				],
@@ -892,7 +1076,7 @@
 					{
 						"key": "Authorization",
 						"type": "text",
-						"value": "Bearer {{token}}"
+						"value": "Bearer {{fresh_token}}"
 					}
 				],
 				"body": {

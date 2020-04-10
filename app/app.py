@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
 from flask_restful import Api, Resource
+from models.security import User
 from neomodel import config
 from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
@@ -21,12 +22,18 @@ jwt = JWTManager(app)
 
 
 @jwt.user_identity_loader
-def user_identity_lookup(user):
+def user_identity_lookup(username):
+    user = User.find_by_name(username)
+    if user is None:
+        return None
     return user.name
 
 
 @jwt.user_claims_loader
-def add_claims_to_access_token(user):
+def add_claims_to_access_token(username):
+    user = User.find_by_name(username)
+    if user is None:
+        return None
     if user.is_admin():
         return {'role': 'admin'}    # PUT, GET & DELETE
     return {'role': 'consumer'}     # Only GETs
