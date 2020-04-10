@@ -124,8 +124,8 @@ class LogoutRefreshEndpoint(Resource):
 api.add_resource(LoginEndpoint, '/login')  # Gives back a fresh token
 api.add_resource(RefreshableTokenEndpoint, '/refreshable')  # Gives back a refreshable token using a fresh token
 api.add_resource(RefreshTokenEndpoint, '/refresh')  # Get non fresh token from a refreshable token
-api.add_resource(LogoutEndpoint, '/logout')  # Blacklist the token, not user
-api.add_resource(LogoutRefreshEndpoint, '/logout2')  # Blacklist the refreshed token, not the user
+api.add_resource(LogoutRefreshEndpoint, '/logout')  # Blacklist the current refresh_token
+api.add_resource(LogoutEndpoint, '/logout2')  # Blacklist the current access_token
 api.add_resource(UserEndpoint, '/user/<string:role>')  # Manage Users
 
 
