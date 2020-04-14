@@ -1,4 +1,4 @@
-from flask import Flask, render_template, after_this_request
+from flask import Flask, render_template
 from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
 from flask_restful import Api, Resource
 from models.security import User
