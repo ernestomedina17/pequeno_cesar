@@ -1,4 +1,4 @@
-FROM python:3.5.9-alpine3.10
+FROM python:3.5.9-alpine3.11
 
 # The below lines install Nginx and are taken from the official image at:
 # https://raw.githubusercontent.com/nginxinc/docker-nginx/f7738edec51adb47470a96ad120cd63975a9d3d0/stable/alpine/Dockerfile

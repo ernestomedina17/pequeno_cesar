@@ -130,6 +130,5 @@ api.add_resource(LogoutEndpoint, '/logout2')  # Blacklist the current access_tok
 api.add_resource(UserEndpoint, '/user/<string:role>')  # Manage Users
 
 
-# TODO: Run this app with uWSGI + Nginx in a Docker container
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
