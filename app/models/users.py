@@ -21,6 +21,9 @@ class User(StructuredNode):
     def delete_from_db(self):
         self.delete()
 
+    def json(self):
+        return {'name': self.name}
+
 
 class Administrator(User):
     @classmethod

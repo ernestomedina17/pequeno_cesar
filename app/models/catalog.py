@@ -1,5 +1,5 @@
 from models.products import Pizza, Complement, Drink, Sauce, Package
-from models.security import User, Administrator
+from models.users import User, Administrator
 from neomodel import db
 
 

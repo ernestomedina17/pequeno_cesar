@@ -1,13 +1,12 @@
 from flask import Flask, render_template
 from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
 from flask_restful import Api, Resource
-from models.security import User
+from models.users import User
 from neomodel import config
 from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
 from resources.security import LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 from resources.users import UserEndpoint
-from datetime import timedelta
 import redis
 
 ACCESS_EXPIRES = 300  # 5 minutes
@@ -55,13 +54,13 @@ def my_expired_token_callback(expired_token):
 
 
 @jwt.invalid_token_loader
-def invalid_token_callback(error):
+def invalid_token_callback():
     return {'description': 'Signature verification failed.',
             'error': 'invalid_token'}, 401
 
 
 @jwt.unauthorized_loader
-def missing_token_callback(error):
+def missing_token_callback():
     return {'description': 'Request does not contain an access token.',
             'error': 'authorization_required'}, 401
 
@@ -139,6 +138,9 @@ api.add_resource(RefreshableTokenEndpoint, '/refreshable')  # Gives back a refre
 api.add_resource(RefreshTokenEndpoint, '/refresh')  # Get non fresh token from a refreshable token
 api.add_resource(LogoutRefreshEndpoint, '/logout')  # Blacklist the current refresh_token
 api.add_resource(LogoutEndpoint, '/logout2')  # Blacklist the current access_token
+
+# Only 'admin' or 'consumer' roles are allowed
+# TODO: implement postman tests
 api.add_resource(UserEndpoint, '/user/<string:role>')  # Manage Users
 
 if __name__ == "__main__":
