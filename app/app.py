@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
 from flask_restful import Api, Resource
 from models.users import User
@@ -7,23 +7,25 @@ from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
 from resources.security import LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 from resources.users import UserEndpoint
+from errors import errors
 import redis
+
 
 ACCESS_EXPIRES = 300  # 5 minutes
 REFRESH_EXPIRES = 43200  # 12 hours
 
 app = Flask(__name__)
-api = Api(app)
+api = Api(app=app, errors=errors)
 app.config['JWT_SECRET_KEY'] = 'this-123-is-MY-super-secret-432-KEY-@@@###'
 app.config['JWT_ALGORITHM'] = 'HS512'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = REFRESH_EXPIRES
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
+app.config['PROPAGATE_EXCEPTIONS'] = True
 # TODO: Replace these values with some ENV variables
 config.DATABASE_URL = 'bolt://neo4j:qwerty99@172.17.0.1:7687'
 jwt = JWTManager(app)
-
 
 @jwt.user_identity_loader
 def user_identity_lookup(username):
@@ -46,11 +48,10 @@ def add_claims_to_access_token(username):
 @jwt.expired_token_loader
 def my_expired_token_callback(expired_token):
     token_type = expired_token['type']
-    return {
-               'status': 401,
-               'sub_status': 42,
-               'msg': 'The {} token has expired'.format(token_type)
-           }, 401
+    return jsonify({
+        'status': 412,
+        'msg': 'The {} token has expired'.format(token_type)
+    }), 412
 
 
 @jwt.invalid_token_loader
@@ -140,7 +141,6 @@ api.add_resource(LogoutRefreshEndpoint, '/logout')  # Blacklist the current refr
 api.add_resource(LogoutEndpoint, '/logout2')  # Blacklist the current access_token
 
 # Only 'admin' or 'consumer' roles are allowed
-# TODO: implement postman tests
 api.add_resource(UserEndpoint, '/user/<string:role>')  # Manage Users
 
 if __name__ == "__main__":

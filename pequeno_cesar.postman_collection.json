@@ -7,6 +7,20 @@
 	"item": [
 		{
 			"name": "home",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c910dc30-c1c9-40af-8c33-71881ce488e1",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -22,6 +36,20 @@
 		},
 		{
 			"name": "/login bad pass",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "33ac06aa-a4d2-40c0-9b3b-2912cccf7b3a",
+						"exec": [
+							"pm.test(\"Status code is 401 UNAUTHORIZED\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -51,6 +79,20 @@
 		},
 		{
 			"name": "/login bad username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a775ebae-36b3-4383-b924-82a27ed71f8e",
+						"exec": [
+							"pm.test(\"Status code is 401 UNAUTHORIZED\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -86,11 +128,17 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
 							"pm.test(\"Token is not empty\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.fresh_token !== undefined).to.be.true;",
 							"    pm.environment.set(\"fresh_token\", jsonData.fresh_token);",
-							"});"
+							"});",
+							"",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -131,6 +179,10 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
 							"pm.test(\"Token is not empty\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.refresh_token !== undefined).to.be.true;",
@@ -177,6 +229,10 @@
 					"script": {
 						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
 						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
 							"pm.test(\"Token is not empty\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
@@ -216,7 +272,7 @@
 			"response": []
 		},
 		{
-			"name": "/product/Pizza Bad Bearer Token",
+			"name": "/product/Pizza Expired Token",
 			"event": [
 				{
 					"listen": "test",
@@ -225,6 +281,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 412\", function () {",
+							"    pm.response.to.have.status(412);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -245,7 +305,7 @@
 					{
 						"key": "Authorization",
 						"type": "text",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE1ODYyODYzMDAsImlhdCI6MTU4NjI4NjMwMCwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwiaWRlbnRpdHkiOiJlZHVhcmRvIiwianRpIjoiYmQzMjk4NDItMmQ3MC00OWUxLThmMTEtZjM3YmNiZWNkYjM0IiwiZXhwIjoxNTg2Mjg3MjAwLCJ1c2VyX2NsYWltcyI6eyJyb2xlIjoiY29uc3VtZXIifX0.hZo1UKwpOSb5OYisLiXUTJcsk6syp6EB4QDR_FeVuVo"
+						"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOnsicm9sZSI6ImNvbnN1bWVyIn0sIm5iZiI6MTU4NzA1NjE5OSwiaWF0IjoxNTg3MDU2MTk5LCJleHAiOjE1ODcwNTY0OTksImZyZXNoIjpmYWxzZSwiaWRlbnRpdHkiOiJlZHVhcmRvIiwianRpIjoiMGVkMzQ3NzAtNTA0MS00YmNiLWI0NTAtZGU0OGUyODgwMWExIn0.6E_GrKPCss9BjuEMME17_8HIQpr1Mtq59TMKVjxVAR2GwtKAwAvysoQA0SMi4Rpi0ChjMPtEMZxLNnD5rbckMA"
 					}
 				],
 				"body": {
@@ -276,6 +336,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -327,6 +391,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -378,6 +446,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -429,6 +501,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -467,6 +543,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -518,6 +598,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 403 Forbidden\", function () {",
+							"    pm.response.to.have.status(403);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -567,6 +651,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 403 Forbidden\", function () {",
+							"    pm.response.to.have.status(403);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -615,6 +703,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -694,6 +786,54 @@
 			"response": []
 		},
 		{
+			"name": "/logout2 eduardo fresh_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{fresh_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/logout2",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"logout2"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
 			"name": "/product/Pizza Copy",
 			"event": [
 				{
@@ -703,6 +843,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 401 token in blacklist\", function () {",
+							"    pm.response.to.have.status(401);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -760,6 +904,10 @@
 							"",
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -805,6 +953,11 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.refresh_token !== undefined).to.be.true;",
 							"    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -851,6 +1004,10 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.access_token !== undefined).to.be.true;",
 							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -895,6 +1052,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -944,6 +1105,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -995,6 +1160,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1046,6 +1215,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1094,6 +1267,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1147,6 +1324,11 @@
 							"pm.test(\"Package Ultra Big has been deleted successfully\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.message).to.include(\"The product 'Ultra Big' does not exist\")",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1198,6 +1380,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1238,6 +1424,532 @@
 			"response": []
 		},
 		{
+			"name": "/user/consumer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "169687dd-2721-4688-8b0d-43d9460cf8ab",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{fresh_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Tom Hanks\",\n    \"password\": \"asdf1234\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/user/consumer",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"consumer"
+					]
+				},
+				"description": "CRUD for little caesars products"
+			},
+			"response": []
+		},
+		{
+			"name": "/user/admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "169687dd-2721-4688-8b0d-43d9460cf8ab",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{fresh_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Al Pacino\",\n    \"password\": \"1234asdf\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/user/admin",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"admin"
+					]
+				},
+				"description": "CRUD for little caesars products"
+			},
+			"response": []
+		},
+		{
+			"name": "/user/consumer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "169687dd-2721-4688-8b0d-43d9460cf8ab",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Tom Hanks\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/user/consumer",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"consumer"
+					]
+				},
+				"description": "CRUD for little caesars products"
+			},
+			"response": []
+		},
+		{
+			"name": "/user/admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "169687dd-2721-4688-8b0d-43d9460cf8ab",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{access_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Al Pacino\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/user/admin",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"admin"
+					]
+				},
+				"description": "CRUD for little caesars products"
+			},
+			"response": []
+		},
+		{
+			"name": "/login Tom",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a82719c3-2266-412b-a723-f99ca084e828",
+						"exec": [
+							"pm.test(\"Token is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.fresh_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"user_fresh_token\", jsonData.fresh_token);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"Tom Hanks\",\n\t\"password\": \"asdf1234\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/login",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/logout2 Tom user_fresh_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{user_fresh_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/logout2",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"logout2"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/login Al",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a82719c3-2266-412b-a723-f99ca084e828",
+						"exec": [
+							"pm.test(\"Token is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.fresh_token !== undefined).to.be.true;",
+							"    pm.environment.set(\"user_fresh_token\", jsonData.fresh_token);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"Al Pacino\",\n\t\"password\": \"1234asdf\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/login",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/logout2 Al user_fresh_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{user_fresh_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/logout2",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"logout2"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/user/consumer Tom",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b46807fc-4f69-40c6-b4dc-fc7b80a7e935",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{fresh_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Tom Hanks\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/user/consumer",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"consumer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/admin Al",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b46807fc-4f69-40c6-b4dc-fc7b80a7e935",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{fresh_token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Al Pacino\"\n}"
+				},
+				"url": {
+					"raw": "http://{{host}}/user/admin",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"user",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/logout ernesto refresh_token",
 			"event": [
 				{
@@ -1247,6 +1959,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1291,6 +2007,10 @@
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1309,6 +2029,54 @@
 						"key": "Authorization",
 						"type": "text",
 						"value": "Bearer {{access_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}/logout2",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"logout2"
+					]
+				},
+				"description": "Get JWT Bearer token for user or admin"
+			},
+			"response": []
+		},
+		{
+			"name": "/logout2 ernesto fresh_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0873ac01-abb3-4577-9367-470f8f601c64",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{fresh_token}}"
 					}
 				],
 				"url": {
