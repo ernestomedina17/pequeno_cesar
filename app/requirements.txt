@@ -3,3 +3,4 @@ Flask-RESTful
 Flask-JWT-Extended
 neomodel
 gunicorn    # 2-4 workers per core in the server.
+redis

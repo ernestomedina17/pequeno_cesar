@@ -7,13 +7,18 @@ from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
 from resources.security import LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 from resources.users import UserEndpoint
+from datetime import timedelta
+import redis
+
+ACCESS_EXPIRES = 300  # 5 minutes
+REFRESH_EXPIRES = 43200  # 12 hours
 
 app = Flask(__name__)
 api = Api(app)
 app.config['JWT_SECRET_KEY'] = 'this-123-is-MY-super-secret-432-KEY-@@@###'
 app.config['JWT_ALGORITHM'] = 'HS512'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 300  # seconds
-app.config['JWT_REFRESH_TOKEN_EXPIRES'] = 43200  # 12 hours
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = REFRESH_EXPIRES
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 # TODO: Replace these values with some ENV variables
@@ -73,14 +78,21 @@ def revoked_token_callback():
             'error': 'token_revoked'}, 401
 
 
-# TODO: Persist Blacklisted tokens into Neo4j or Redis
-blacklist = set()
+# TODO: Pass values as ENV Variables
+# Token Blacklist
+blacklist = redis.StrictRedis(host='172.17.0.1',  # Default Docker Host Interface
+                              port=6379,
+                              db=0,
+                              decode_responses=True)
 
 
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     jti = decrypted_token['jti']
-    return jti in blacklist
+    entry = blacklist.get(jti)
+    if entry:
+        return True
+    return False
 
 
 @app.before_first_request
@@ -103,21 +115,21 @@ api.add_resource(ProductsEndpoint, '/products')  # GET
 
 
 # User and Security endpoints
-# Blacklist Fresh
+# Blacklist Refreshed Access Tokens, can be used for Fresh tokens too.
 class LogoutEndpoint(Resource):
     @jwt_required
     def post(self):
         jti = get_raw_jwt()['jti']
-        blacklist.add(jti)
-        return {"message": "Successfully logged out"}, 200
+        blacklist.setex(name=jti, time=ACCESS_EXPIRES, value=jti)
+        return {"message": "Successfully logged out2"}, 200
 
 
-# Blacklist Non Fresh
+# Blacklist Refresh tokens.
 class LogoutRefreshEndpoint(Resource):
     @jwt_refresh_token_required
     def post(self):
         jti = get_raw_jwt()['jti']
-        blacklist.add(jti)
+        blacklist.setex(name=jti, time=REFRESH_EXPIRES, value=jti)
         return {"message": "Successfully logged out"}, 200
 
 
@@ -128,7 +140,6 @@ api.add_resource(RefreshTokenEndpoint, '/refresh')  # Get non fresh token from a
 api.add_resource(LogoutRefreshEndpoint, '/logout')  # Blacklist the current refresh_token
 api.add_resource(LogoutEndpoint, '/logout2')  # Blacklist the current access_token
 api.add_resource(UserEndpoint, '/user/<string:role>')  # Manage Users
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

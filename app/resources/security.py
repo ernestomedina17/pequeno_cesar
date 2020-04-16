@@ -1,5 +1,5 @@
 from flask_jwt_extended import (create_access_token, jwt_refresh_token_required, get_jwt_identity,
-                                create_refresh_token, get_raw_jwt, jwt_required, fresh_jwt_required, get_jwt_claims)
+                                create_refresh_token, fresh_jwt_required, get_jwt_claims)
 from flask_restful import Resource, reqparse
 from models.security import User
 from werkzeug.security import safe_str_cmp
