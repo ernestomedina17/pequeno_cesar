@@ -1,98 +1,27 @@
-from flask import Flask, render_template, jsonify
-from flask_jwt_extended import JWTManager, jwt_required, jwt_refresh_token_required, get_raw_jwt
-from flask_restful import Api, Resource
-from models.users import User
-from neomodel import config
+from flask import Flask, render_template
+from flask_jwt_extended import JWTManager
+from flask_restful import Api
 from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
-from resources.security import LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 from resources.users import UserEndpoint
 from errors import errors
+from neomodel import config
+from config import set_app_config
+from security import (configure_JWTManager, LogoutEndpoint, LogoutRefreshEndpoint, LoginEndpoint,
+                      RefreshableTokenEndpoint, RefreshTokenEndpoint)
 import redis
-
-
-ACCESS_EXPIRES = 300  # 5 minutes
-REFRESH_EXPIRES = 43200  # 12 hours
 
 app = Flask(__name__)
 api = Api(app=app, errors=errors)
-app.config['JWT_SECRET_KEY'] = 'this-123-is-MY-super-secret-432-KEY-@@@###'
-app.config['JWT_ALGORITHM'] = 'HS512'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = ACCESS_EXPIRES
-app.config['JWT_REFRESH_TOKEN_EXPIRES'] = REFRESH_EXPIRES
-app.config['JWT_BLACKLIST_ENABLED'] = True
-app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-app.config['PROPAGATE_EXCEPTIONS'] = True
-# TODO: Replace these values with some ENV variables
-config.DATABASE_URL = 'bolt://neo4j:qwerty99@172.17.0.1:7687'
+app_conf = set_app_config()
+app.config.from_object(app_conf)
+config.DATABASE_URL = app_conf.NEO4J_DB_URL
 jwt = JWTManager(app)
-
-@jwt.user_identity_loader
-def user_identity_lookup(username):
-    user = User.find_by_name(username)
-    if user is None:
-        return None
-    return user.name
-
-
-@jwt.user_claims_loader
-def add_claims_to_access_token(username):
-    user = User.find_by_name(username)
-    if user is None:
-        return None
-    if user.is_admin():
-        return {'role': 'admin'}  # PUT, GET & DELETE
-    return {'role': 'consumer'}  # Only GETs
-
-
-@jwt.expired_token_loader
-def my_expired_token_callback(expired_token):
-    token_type = expired_token['type']
-    return jsonify({
-        'status': 412,
-        'msg': 'The {} token has expired'.format(token_type)
-    }), 412
-
-
-@jwt.invalid_token_loader
-def invalid_token_callback():
-    return {'description': 'Signature verification failed.',
-            'error': 'invalid_token'}, 401
-
-
-@jwt.unauthorized_loader
-def missing_token_callback():
-    return {'description': 'Request does not contain an access token.',
-            'error': 'authorization_required'}, 401
-
-
-@jwt.needs_fresh_token_loader
-def token_not_fresh_callback():
-    return {'description': 'The token is not fresh',
-            'error': 'fresh_token_required'}, 401
-
-
-@jwt.revoked_token_loader
-def revoked_token_callback():
-    return {'description': 'The token has been revoked.',
-            'error': 'token_revoked'}, 401
-
-
-# TODO: Pass values as ENV Variables
-# Token Blacklist
-blacklist = redis.StrictRedis(host='172.17.0.1',  # Default Docker Host Interface
-                              port=6379,
-                              db=0,
-                              decode_responses=True)
-
-
-@jwt.token_in_blacklist_loader
-def check_if_token_in_blacklist(decrypted_token):
-    jti = decrypted_token['jti']
-    entry = blacklist.get(jti)
-    if entry:
-        return True
-    return False
+tokens_blacklist = redis.StrictRedis(host=app_conf.REDIS_DB_SERVER,
+                                     port=6379,
+                                     db=0,
+                                     decode_responses=True)
+configure_JWTManager(jwt, tokens_blacklist)
 
 
 @app.before_first_request
@@ -113,35 +42,24 @@ api.add_resource(ProductEndpoint, '/product/<string:category>')  # PUT, GET & DE
 # Return all the products
 api.add_resource(ProductsEndpoint, '/products')  # GET
 
-
-# User and Security endpoints
-# Blacklist Refreshed Access Tokens, can be used for Fresh tokens too.
-class LogoutEndpoint(Resource):
-    @jwt_required
-    def post(self):
-        jti = get_raw_jwt()['jti']
-        blacklist.setex(name=jti, time=ACCESS_EXPIRES, value=jti)
-        return {"message": "Successfully logged out2"}, 200
-
-
-# Blacklist Refresh tokens.
-class LogoutRefreshEndpoint(Resource):
-    @jwt_refresh_token_required
-    def post(self):
-        jti = get_raw_jwt()['jti']
-        blacklist.setex(name=jti, time=REFRESH_EXPIRES, value=jti)
-        return {"message": "Successfully logged out"}, 200
-
-
 # Users can GET, Admins can PUT, GET and DELETE.
-api.add_resource(LoginEndpoint, '/login')  # Gives back a fresh token
-api.add_resource(RefreshableTokenEndpoint, '/refreshable')  # Gives back a refreshable token using a fresh token
-api.add_resource(RefreshTokenEndpoint, '/refresh')  # Get non fresh token from a refreshable token
-api.add_resource(LogoutRefreshEndpoint, '/logout')  # Blacklist the current refresh_token
-api.add_resource(LogoutEndpoint, '/logout2')  # Blacklist the current access_token
+# Gives back a fresh token
+api.add_resource(LoginEndpoint, '/login')  # POST
 
-# Only 'admin' or 'consumer' roles are allowed
-api.add_resource(UserEndpoint, '/user/<string:role>')  # Manage Users
+# Gives back a refreshable token using a fresh token
+api.add_resource(RefreshableTokenEndpoint, '/refreshable')  # POST
+
+# Get non fresh token from a refreshable token
+api.add_resource(RefreshTokenEndpoint, '/refresh')  # POST
+
+# Blacklist the current refresh_token
+api.add_resource(LogoutRefreshEndpoint(tokens_blacklist, app_conf.refresh_expires), '/logout')  # POST
+
+# Blacklist the current access_token
+api.add_resource(LogoutEndpoint(tokens_blacklist, app_conf.access_expires), '/logout2')  # POST
+
+# CRUD for Users, only 'admin' or 'consumer' roles are allowed
+api.add_resource(UserEndpoint, '/user/<string:role>')  # PUT, GET & DELETE
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
