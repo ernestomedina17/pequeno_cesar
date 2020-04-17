@@ -1,6 +1,6 @@
-from flask_jwt_extended import (get_jwt_claims, verify_jwt_in_request, jwt_required, get_raw_jwt,
-                                create_access_token, jwt_refresh_token_required, get_jwt_identity,
-                                create_refresh_token, fresh_jwt_required)
+from flask_jwt_extended import (get_jwt_claims, verify_jwt_in_request, create_access_token,
+                                jwt_refresh_token_required, get_jwt_identity, create_refresh_token,
+                                fresh_jwt_required)
 from flask_restful import Resource, reqparse
 from functools import wraps
 from werkzeug.security import safe_str_cmp
@@ -73,32 +73,6 @@ def configure_JWTManager(jwt, tokens_blacklist):
     return False
 
 
-# Blacklist Refreshed Access Tokens, can be used for Fresh tokens too.
-class LogoutEndpoint(Resource):
-    def __init__(self, tokens_blacklist, access_expires):
-        self.tokens_blacklist = tokens_blacklist
-        self.access_expires = access_expires
-
-    @jwt_required
-    def post(self):
-        jti = get_raw_jwt()['jti']
-        self.tokens_blacklist.setex(name=jti, time=self.access_expires, value=jti)
-        return {"message": "Successfully logged out2"}, 200
-
-
-# Blacklist Refresh tokens.
-class LogoutRefreshEndpoint(Resource):
-    def __init__(self, tokens_blacklist, refresh_expires):
-        self.tokens_blacklist = tokens_blacklist
-        self.refresh_expires = refresh_expires
-
-    @jwt_refresh_token_required
-    def post(self):
-        jti = get_raw_jwt()['jti']
-        self.tokens_blacklist.setex(name=jti, time=self.refresh_expires, value=jti)
-        return {"message": "Successfully logged out"}, 200
-
-
 def get_user():
     parser = reqparse.RequestParser()
     parser.add_argument('username',
@@ -139,4 +113,3 @@ class RefreshTokenEndpoint(Resource):
         return {'access_token': create_access_token(identity=get_jwt_identity(),
                                                     fresh=False,
                                                     user_claims=get_jwt_claims())}, 200
-

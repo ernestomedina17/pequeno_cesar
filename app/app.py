@@ -1,14 +1,13 @@
 from flask import Flask, render_template
-from flask_jwt_extended import JWTManager
-from flask_restful import Api
+from flask_jwt_extended import JWTManager, jwt_required, get_raw_jwt, jwt_refresh_token_required
+from flask_restful import Api, Resource
 from resources.products import ProductEndpoint, ProductsEndpoint
 from models.catalog import Catalog
 from resources.users import UserEndpoint
 from errors import errors
 from neomodel import config
 from config import set_app_config
-from security import (configure_JWTManager, LogoutEndpoint, LogoutRefreshEndpoint, LoginEndpoint,
-                      RefreshableTokenEndpoint, RefreshTokenEndpoint)
+from security import configure_JWTManager, LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 import redis
 
 app = Flask(__name__)
@@ -52,11 +51,29 @@ api.add_resource(RefreshableTokenEndpoint, '/refreshable')  # POST
 # Get non fresh token from a refreshable token
 api.add_resource(RefreshTokenEndpoint, '/refresh')  # POST
 
-# Blacklist the current refresh_token
-api.add_resource(LogoutRefreshEndpoint(tokens_blacklist, app_conf.refresh_expires), '/logout')  # POST
 
-# Blacklist the current access_token
-api.add_resource(LogoutEndpoint(tokens_blacklist, app_conf.access_expires), '/logout2')  # POST
+# Blacklist fresh_tokens and access_tokens
+class LogoutEndpoint(Resource):
+    @jwt_required
+    def post(self):
+        jti = get_raw_jwt()['jti']
+        tokens_blacklist.setex(name=jti, time=app_conf.access_expires, value=jti)
+        return {"message": "Successfully logged out2"}, 200
+
+
+api.add_resource(LogoutEndpoint, '/logout')  # POST
+
+
+# Blacklist Refresh tokens.
+class LogoutRefreshEndpoint(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        jti = get_raw_jwt()['jti']
+        tokens_blacklist.setex(name=jti, time=app_conf.refresh_expires, value=jti)
+        return {"message": "Successfully logged out"}, 200
+
+
+api.add_resource(LogoutRefreshEndpoint, '/logout2')  # POST
 
 # CRUD for Users, only 'admin' or 'consumer' roles are allowed
 api.add_resource(UserEndpoint, '/user/<string:role>')  # PUT, GET & DELETE
