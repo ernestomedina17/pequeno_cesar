@@ -61,7 +61,7 @@ class LogoutEndpoint(Resource):
         return {"message": "Successfully logged out2"}, 200
 
 
-api.add_resource(LogoutEndpoint, '/logout')  # POST
+api.add_resource(LogoutEndpoint, '/logout2')  # POST
 
 
 # Blacklist Refresh tokens.
@@ -73,7 +73,7 @@ class LogoutRefreshEndpoint(Resource):
         return {"message": "Successfully logged out"}, 200
 
 
-api.add_resource(LogoutRefreshEndpoint, '/logout2')  # POST
+api.add_resource(LogoutRefreshEndpoint, '/logout')  # POST
 
 # CRUD for Users, only 'admin' or 'consumer' roles are allowed
 api.add_resource(UserEndpoint, '/user/<string:role>')  # PUT, GET & DELETE

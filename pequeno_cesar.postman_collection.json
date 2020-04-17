@@ -272,7 +272,7 @@
 			"response": []
 		},
 		{
-			"name": "/product/Pizza Expired Token",
+			"name": "/product/Pizza Invalid Token",
 			"event": [
 				{
 					"listen": "test",
@@ -283,8 +283,8 @@
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
 							"});",
 							"",
-							"pm.test(\"Status code is 412\", function () {",
-							"    pm.response.to.have.status(412);",
+							"pm.test(\"Status code is 422\", function () {",
+							"    pm.response.to.have.status(422);",
 							"});"
 						],
 						"type": "text/javascript"

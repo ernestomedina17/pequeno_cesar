@@ -36,33 +36,20 @@ def configure_JWTManager(jwt, tokens_blacklist):
             return {'role': 'admin'}  # PUT, GET & DELETE
         return {'role': 'consumer'}  # Only GETs
 
-    @jwt.expired_token_loader
-    def my_expired_token_callback(expired_token):
-        token_type = expired_token['type']
-        return {
-                   "status": 412,
-                   "msg": "The {} token has expired".format(token_type)
-               }, 412
-
-    @jwt.invalid_token_loader
-    def invalid_token_callback():
-        return {'description': 'Signature verification failed.',
-                'error': 'invalid_token'}, 401
-
-    @jwt.unauthorized_loader
-    def missing_token_callback():
-        return {'description': 'Request does not contain an access token.',
-                'error': 'authorization_required'}, 401
-
-    @jwt.needs_fresh_token_loader
-    def token_not_fresh_callback():
-        return {'description': 'The token is not fresh',
-                'error': 'fresh_token_required'}, 401
-
-    @jwt.revoked_token_loader
-    def revoked_token_callback():
-        return {'description': 'The token has been revoked.',
-                'error': 'token_revoked'}, 401
+    # @jwt.unauthorized_loader
+    # def missing_token_callback():
+    #     return {'description': 'Request does not contain an access token.',
+    #             'error': 'authorization_required'}, 401
+    #
+    # @jwt.needs_fresh_token_loader
+    # def token_not_fresh_callback():
+    #     return {'description': 'The token is not fresh',
+    #             'error': 'fresh_token_required'}, 401
+    #
+    # @jwt.revoked_token_loader
+    # def revoked_token_callback():
+    #     return {'description': 'The token has been revoked.',
+    #             'error': 'token_revoked'}, 401
 
     @jwt.token_in_blacklist_loader
     def check_if_token_in_blacklist(decrypted_token):
