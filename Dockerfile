@@ -115,13 +115,16 @@ STOPSIGNAL SIGTERM
 CMD ["nginx", "-g", "daemon off;"]
 
 
-# Custom part of the image to integrate Nginx with uWSGI and our Flask App
-# https://github.com/tiangolo/uwsgi-nginx-docker/blob/master/python3.5/supervisord.conf
-# https://github.com/tiangolo/uwsgi-nginx-docker/blob/master/python3.5/uwsgi.ini
+# Custom part of the image to include and run the app with gunicorn
 
 ENV APP_HOME=/app \
     APP_GROUP=pequeno \
     APP_USER=cesar
+    # TODO: implement secrets to access these keys and passwords
+    # WARNING: The below ENV variables are required to be exported or explicitly passed at runtime.
+    # JWT_SECRET_KEY; String to encrypt tokens
+    # NEO4J_DB_PASSWORD; String password of neo4j user
+    # APP_MODE; Values may be: dev, test or prod
 
 COPY app "${APP_HOME}"
 
@@ -135,6 +138,4 @@ RUN addgroup --system "${APP_GROUP}" -g 1000 && adduser --system --no-create-hom
 EXPOSE 5000/tcp
 USER "${APP_USER}":"${APP_GROUP}"
 WORKDIR "${APP_HOME}"
-# ENTRYPOINT ["python", "app.py"]
-CMD ["--bind=0.0.0.0:5000", "--workers=3"]
-ENTRYPOINT ["gunicorn", "--workers=2", "app:app"]
+ENTRYPOINT ["gunicorn", "--workers=3", "--bind=0.0.0.0:5000", "app:app"]
