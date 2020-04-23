@@ -22,4 +22,11 @@ RUN addgroup --system "${APP_GROUP}" -g 1000 && adduser --system --no-create-hom
 EXPOSE 5000/tcp
 USER "${APP_USER}":"${APP_GROUP}"
 WORKDIR "${APP_HOME}"
-ENTRYPOINT ["gunicorn", "--workers=3", "--bind=0.0.0.0:5000", "app:app"]
+
+ENTRYPOINT ["gunicorn", \
+            "--workers=3", \
+            "--bind=0.0.0.0:5000", \
+            "--access-logfile=-", \
+            "--error-logfile=-", \
+            "--log-file=-", \
+            "app:app"]
