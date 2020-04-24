@@ -16,10 +16,11 @@ from prometheus_client import Summary, Histogram, Gauge, Counter
 #  'max': Return a single timeseries that is the maximum of the values of all processes, alive or dead.
 #  'min': Return a single timeseries that is the minimum of the values of all processes, alive or dead.
 
-metrics_req_latency = Histogram(__name__.replace('.', '_') + '_request_latency_seconds', 'Flask Request Latency')
+metrics_req_latency = Histogram(__name__.replace('.', '_') + '_request_latency_seconds',
+                                'Flask Request Latency')
 # metrics_req_time = Summary('request_processing_seconds', 'Time spent processing request')
 # metrics_req_count = Counter('my_failures', 'Description of counter')
 # metrics_req_in_progress = Gauge("inprogress_requests", "help", multiprocess_mode='livesum')
 # metrics_req_label = Counter('my_requests_total', 'HTTP Failures', ['method', 'endpoint'])
-# metrics_req_label.labels('get', '/').inc()
-# metrics_req_label.labels('post', '/submit').inc()
+# @metrics_req_label.labels('get', '/').inc()
+# @metrics_req_label.labels('post', '/submit').inc()

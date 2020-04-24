@@ -3,7 +3,8 @@ from flask_restful import Resource, reqparse
 from models.products import Pizza, Complement, Drink, Sauce, Package, Products
 from flask_jwt_extended import get_jwt_claims, fresh_jwt_required, jwt_refresh_token_required, jwt_required
 from security import admin_required
-from metrics import metrics_req_latency
+from metrics import metrics_req_latency, metrics_req_latency
+
 
 def validate_category(category):
     parser = reqparse.RequestParser()

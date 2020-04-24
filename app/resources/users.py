@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from security import admin_required
 from werkzeug.security import safe_str_cmp
 from models.users import User, Administrator
-from metrics import metrics_req_latency
+from metrics import metrics_req_latency, metrics_req_latency
 
 
 class UserEndpoint(Resource):
