@@ -3,6 +3,7 @@ from flask_jwt_extended import (get_jwt_claims, verify_jwt_in_request, create_ac
                                 fresh_jwt_required)
 from flask_restful import Resource, reqparse
 from functools import wraps
+from metrics import metrics_req_latency
 from werkzeug.security import safe_str_cmp
 from models.users import User
 
@@ -65,6 +66,7 @@ def get_user():
 
 
 class LoginEndpoint(Resource):
+    @metrics_req_latency.time()
     def post(self):
         user = get_user()
         if user is None:
@@ -74,6 +76,7 @@ class LoginEndpoint(Resource):
 
 class RefreshableTokenEndpoint(Resource):
     @fresh_jwt_required
+    @metrics_req_latency.time()
     def post(self):
         return {'refresh_token': create_refresh_token(identity=get_jwt_identity(),
                                                       user_claims=get_jwt_claims())}, 200
@@ -81,6 +84,7 @@ class RefreshableTokenEndpoint(Resource):
 
 class RefreshTokenEndpoint(Resource):
     @jwt_refresh_token_required
+    @metrics_req_latency.time()
     def post(self):
         return {'access_token': create_access_token(identity=get_jwt_identity(),
                                                     fresh=False,

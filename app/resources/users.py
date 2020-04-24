@@ -3,11 +3,13 @@ from flask_restful import Resource, reqparse
 from security import admin_required
 from werkzeug.security import safe_str_cmp
 from models.users import User, Administrator
+from metrics import metrics_req_latency
 
 
 class UserEndpoint(Resource):
     @admin_required
     @fresh_jwt_required
+    @metrics_req_latency.time()
     def put(self, role):
         parser = reqparse.RequestParser()
         parser.add_argument('name',
@@ -41,9 +43,9 @@ class UserEndpoint(Resource):
         user.refresh()
         return user.json()
 
-
     @admin_required
     @fresh_jwt_required
+    @metrics_req_latency.time()
     def delete(self, role):
         parser = reqparse.RequestParser()
         parser.add_argument('name',
@@ -74,9 +76,9 @@ class UserEndpoint(Resource):
 
         return {'message': "The user '{}' has been deleted".format(data["name"])}
 
-
     @admin_required
     @jwt_required
+    @metrics_req_latency.time()
     def get(self, role):
         parser = reqparse.RequestParser()
         parser.add_argument('name',

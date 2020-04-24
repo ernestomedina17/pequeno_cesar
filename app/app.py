@@ -8,6 +8,8 @@ from errors import errors
 from neomodel import config
 from config import set_app_config
 from security import configure_JWTManager, LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
+from prometheus_client import multiprocess, generate_latest, CollectorRegistry
+from metrics import metrics_req_latency
 import redis
 
 app = Flask(__name__)
@@ -31,8 +33,16 @@ def load_catalog():
 
 
 @app.route('/')
+@metrics_req_latency.time()
 def home():
     return render_template('index.html')
+
+
+@app.route('/metrics')
+def metrics():
+    registry = CollectorRegistry()
+    multiprocess.MultiProcessCollector(registry)
+    return generate_latest(registry), 200
 
 
 # Valid product categories are: Pizza, Complement, Drink, Sauce and Package
@@ -55,6 +65,7 @@ api.add_resource(RefreshTokenEndpoint, '/refresh')  # POST
 # Blacklist fresh_tokens and access_tokens
 class LogoutEndpoint(Resource):
     @jwt_required
+    @metrics_req_latency.time()
     def post(self):
         jti = get_raw_jwt()['jti']
         tokens_blacklist.setex(name=jti, time=app_conf.access_expires, value=jti)
@@ -67,6 +78,7 @@ api.add_resource(LogoutEndpoint, '/logout2')  # POST
 # Blacklist Refresh tokens.
 class LogoutRefreshEndpoint(Resource):
     @jwt_refresh_token_required
+    @metrics_req_latency.time()
     def post(self):
         jti = get_raw_jwt()['jti']
         tokens_blacklist.setex(name=jti, time=app_conf.refresh_expires, value=jti)
@@ -77,6 +89,7 @@ api.add_resource(LogoutRefreshEndpoint, '/logout')  # POST
 
 # CRUD for Users, only 'admin' or 'consumer' roles are allowed
 api.add_resource(UserEndpoint, '/user/<string:role>')  # PUT, GET & DELETE
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

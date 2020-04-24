@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from models.products import Pizza, Complement, Drink, Sauce, Package, Products
 from flask_jwt_extended import get_jwt_claims, fresh_jwt_required, jwt_refresh_token_required, jwt_required
 from security import admin_required
-
+from metrics import metrics_req_latency
 
 def validate_category(category):
     parser = reqparse.RequestParser()
@@ -40,6 +40,7 @@ class ProductEndpoint(Resource):
 
     @admin_required
     @fresh_jwt_required
+    @metrics_req_latency.time()
     def put(self, category):
         parser = reqparse.RequestParser()
         parser.add_argument('name',
@@ -183,6 +184,7 @@ class ProductEndpoint(Resource):
     # If no Authorization header is sent it throws an error 500, which needs to be handled hopefully by Nginx.
     # flask_jwt_extended.exceptions.NoAuthorizationError: Missing Authorization Header
     @jwt_required
+    @metrics_req_latency.time()
     def get(self, category):
         claims = get_jwt_claims()
         if not claims['role']:
@@ -195,6 +197,7 @@ class ProductEndpoint(Resource):
 
     @admin_required
     @fresh_jwt_required
+    @metrics_req_latency.time()
     def delete(self, category):
         product, data = validate_category(category)
         if product is None and data is None:
@@ -209,5 +212,6 @@ class ProductEndpoint(Resource):
 # Retrieve a list of all the products
 class ProductsEndpoint(Resource):
     @jwt_required
+    @metrics_req_latency.time()
     def get(self):
         return Products.json()
