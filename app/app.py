@@ -9,7 +9,7 @@ from neomodel import config
 from config import set_app_config
 from security import configure_JWTManager, LoginEndpoint, RefreshableTokenEndpoint, RefreshTokenEndpoint
 from prometheus_client import multiprocess, generate_latest, CollectorRegistry
-from metrics import metrics_req_latency
+from metrics import metrics_req_latency, metrics_req_count, metrics_req_in_progress
 import redis
 
 app = Flask(__name__)
@@ -34,7 +34,9 @@ def load_catalog():
 
 @app.route('/')
 @metrics_req_latency.time()
+@metrics_req_in_progress.track_inprogress()
 def home():
+    metrics_req_count.labels(method='GET', endpoint='/', status_code='200').inc()  # Increment the counter
     return render_template('index.html')
 
 
@@ -66,9 +68,11 @@ api.add_resource(RefreshTokenEndpoint, '/refresh')  # POST
 class LogoutEndpoint(Resource):
     @jwt_required
     @metrics_req_latency.time()
+    @metrics_req_in_progress.track_inprogress()
     def post(self):
         jti = get_raw_jwt()['jti']
         tokens_blacklist.setex(name=jti, time=app_conf.access_expires, value=jti)
+        metrics_req_count.labels(method='POST', endpoint='/logout2', status_code='200').inc()
         return {"message": "Successfully logged out2"}, 200
 
 
@@ -79,9 +83,11 @@ api.add_resource(LogoutEndpoint, '/logout2')  # POST
 class LogoutRefreshEndpoint(Resource):
     @jwt_refresh_token_required
     @metrics_req_latency.time()
+    @metrics_req_in_progress.track_inprogress()
     def post(self):
         jti = get_raw_jwt()['jti']
         tokens_blacklist.setex(name=jti, time=app_conf.refresh_expires, value=jti)
+        metrics_req_count.labels(method='POST', endpoint='/logout', status_code='200').inc()
         return {"message": "Successfully logged out"}, 200
 
 

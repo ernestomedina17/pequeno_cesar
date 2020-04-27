@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from models.products import Pizza, Complement, Drink, Sauce, Package, Products
 from flask_jwt_extended import get_jwt_claims, fresh_jwt_required, jwt_refresh_token_required, jwt_required
 from security import admin_required
-from metrics import metrics_req_latency, metrics_req_latency
+from metrics import metrics_req_latency, metrics_req_in_progress, metrics_req_count
 
 
 def validate_category(category):
@@ -42,6 +42,7 @@ class ProductEndpoint(Resource):
     @admin_required
     @fresh_jwt_required
     @metrics_req_latency.time()
+    @metrics_req_in_progress.track_inprogress()
     def put(self, category):
         parser = reqparse.RequestParser()
         parser.add_argument('name',
@@ -176,43 +177,55 @@ class ProductEndpoint(Resource):
                     product.pizzas = data['sauces']
 
         else:
+            metrics_req_count.labels(method='PUT', endpoint='/product', status_code='400').inc()
             return {'message': 'Invalid category name'}, 400
 
         product.save_to_db()
         product.refresh()
+        metrics_req_count.labels(method='PUT', endpoint='/product', status_code='200').inc()
         return product.json()
 
     # If no Authorization header is sent it throws an error 500, which needs to be handled hopefully by Nginx.
     # flask_jwt_extended.exceptions.NoAuthorizationError: Missing Authorization Header
     @jwt_required
     @metrics_req_latency.time()
+    @metrics_req_in_progress.track_inprogress()
     def get(self, category):
         claims = get_jwt_claims()
         if not claims['role']:
+            metrics_req_count.labels(method='GET', endpoint='/product', status_code='401').inc()
             return {'message': 'No authorization'}, 401
 
         product, data = validate_category(category)
         if product is None:
+            metrics_req_count.labels(method='GET', endpoint='/product', status_code='400').inc()
             return {'message': "The product '{}' does not exist".format(data["name"])}, 400
+        metrics_req_count.labels(method='GET', endpoint='/product', status_code='200').inc()
         return product.json()
 
     @admin_required
     @fresh_jwt_required
     @metrics_req_latency.time()
+    @metrics_req_in_progress.track_inprogress()
     def delete(self, category):
         product, data = validate_category(category)
         if product is None and data is None:
+            metrics_req_count.labels(method='DELETE', endpoint='/product', status_code='400').inc()
             return {'message': 'Invalid category name'}, 400
         elif product is None and data is not None:
+            metrics_req_count.labels(method='DELETE', endpoint='/product', status_code='400').inc()
             return {'message': "The product '{}' does not exist or has already been deleted".format(data["name"])}, 400
         else:
             product.delete_from_db()
-        return {'message': "The product '{}' has been deleted".format(data["name"])}
+        metrics_req_count.labels(method='DELETE', endpoint='/product', status_code='200').inc()
+        return {'message': "The product '{}' has been deleted".format(data["name"])}, 200
 
 
 # Retrieve a list of all the products
 class ProductsEndpoint(Resource):
     @jwt_required
     @metrics_req_latency.time()
+    @metrics_req_in_progress.track_inprogress()
     def get(self):
+        metrics_req_count.labels(method='GET', endpoint='/products', status_code='200').inc()
         return Products.json()
