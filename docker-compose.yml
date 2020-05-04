@@ -30,7 +30,7 @@ services:
     ports:
       - "172.17.0.1:9090:9090"
     volumes:
-    - "prometheus.yml:/etc/prometheus/prometheus.yml"
+    - "./prometheus:/etc/prometheus"
   grafana:
     # user:admin, password:admin
     image: "grafana/grafana:6.7.3"
