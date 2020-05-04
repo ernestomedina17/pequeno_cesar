@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
                       RelationshipTo, RelationshipFrom, StructuredRel)
+from metrics import metrics_query_latency, metrics_query_in_progress, metrics_query_count
 
 
 class Has(StructuredRel):
@@ -14,18 +15,26 @@ class Product(StructuredNode):
     units = IntegerProperty(index=True, default=1)
 
     @classmethod
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def find_by_name(cls, name=None):
+        metrics_query_count.labels(object=type(cls).__name__, method='find_by_name').inc()
         return cls.nodes.first_or_none(name=name)
 
     @db.transaction
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def save_to_db(self):
+        metrics_query_count.labels(object=type(self).__name__, method='save_to_db').inc()
         self.save()
 
     @db.transaction
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def delete_from_db(self):
+        metrics_query_count.labels(object=type(self).__name__, method='delete_from_db').inc()
         self.delete()
 
-    @abstractmethod
     def json(self):
         pass
 
@@ -37,7 +46,10 @@ class Pizza(Product):
     form = StringProperty(required=True, choices={"REDONDA": "REDONDA", "CUADRADA": "CUADRADA"})
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def json(self):
+        metrics_query_count.labels(object='Pizza', method='json').inc()
         return {'name': self.name,
                 'price': self.price,
                 'units': self.units,
@@ -50,7 +62,10 @@ class Complement(Product):
     ingredients = ArrayProperty(StringProperty(), required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def json(self):
+        metrics_query_count.labels(object='Complement', method='json').inc()
         return {'name': self.name,
                 'price': self.price,
                 'units': self.units,
@@ -63,7 +78,10 @@ class Drink(Product):
     litres = FloatProperty(required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def json(self):
+        metrics_query_count.labels(object='Drink', method='json').inc()
         return {'name': self.name,
                 'price': self.price,
                 'units': self.units,
@@ -75,7 +93,10 @@ class Sauce(Product):
     description = StringProperty(required=True)
     rel_package = RelationshipFrom('Package', 'HAS', model=Has)
 
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def json(self):
+        metrics_query_count.labels(object='Sauce', method='json').inc()
         return {'name': self.name,
                 'price': self.price,
                 'units': self.units,
@@ -93,6 +114,8 @@ class Package(Product):
     rel_sauce = RelationshipTo('Sauce', 'HAS', model=Has)
 
     # noinspection PyTypeChecker
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def json(self):
         rows_pizzas, col_names = self.cypher(
             "MATCH (pkg) WHERE id(pkg)={self} MATCH (pkg)-[r:HAS]->(product:Pizza) RETURN product.name, r.units")
@@ -120,14 +143,16 @@ class Package(Product):
         if len(rows_sauces) != 0:
             package['sauces'] = {row[0]: row[1] for row in rows_sauces}
 
+        metrics_query_count.labels(object='Package', method='json').inc()
         return package
 
 
 class Products:
     @classmethod
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def json(cls):
-        # packages =
-
+        metrics_query_count.labels(object='Products', method='json').inc()
         return {"Pizzas": [pizza.json() for pizza in Pizza.nodes.all()],
                 "Complements": [complement.json() for complement in Complement.nodes.all()],
                 "Drinks": [drink.json() for drink in Drink.nodes.all()],

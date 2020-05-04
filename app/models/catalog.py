@@ -1,11 +1,14 @@
 from models.products import Pizza, Complement, Drink, Sauce, Package
 from models.users import User, Administrator
 from neomodel import db
+from metrics import metrics_query_count, metrics_query_in_progress, metrics_query_latency
 
 
 class Catalog:
     @classmethod
     @db.transaction
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def load_nodes(cls):
         # noinspection PyTypeChecker
         Pizza.create_or_update(
@@ -172,8 +175,12 @@ class Catalog:
              "drinks": ["Pepsi", "Mirinda", "Manzana"],
              "sauces": ["Crazy Sauce"]})
 
+        metrics_query_count.labels(object='Catalog', method='load_nodes').inc()
+
     @classmethod
     @db.transaction
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def load_relations(cls):
         pepperoni_clasica = Pizza.find_by_name("Pepperoni Clásica")
         crazy_bread = Complement.find_by_name("Crazy Bread")
@@ -211,8 +218,12 @@ class Catalog:
         pkg_fiesta.rel_drink.connect(manzana, {'units': 1}).save()
         pkg_fiesta.rel_sauce.connect(crazy_sauce, {'units': 4}).save()
 
+        metrics_query_count.labels(object='Catalog', method='load_relations').inc()
+
     @classmethod
     @db.transaction
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
     def load_users(cls):
         # noinspection PyTypeChecker
         User.get_or_create(
@@ -223,3 +234,5 @@ class Catalog:
         Administrator.get_or_create(
             {"name": "ernesto",
              "password": "myAdminPassword123"})
+
+        metrics_query_count.labels(object='Catalog', method='load_users').inc()

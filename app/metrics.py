@@ -45,7 +45,7 @@ metrics_query_latency = Histogram('pequeno_cesar_neo4j_request_latency_seconds',
 
 metrics_query_count = Counter('pequeno_cesar_neo4j_requests_total',
                               'Total Neo4j Bolt Cypher Query Count',
-                              ['method', 'endpoint', 'status_code'])
+                              ['object', 'method'])
 
 metrics_query_in_progress = Gauge("pequeno_cesar_neo4j_requests_inprogress",
                                   "Number of in progress Neo4j Bolt Cypher Queries",
