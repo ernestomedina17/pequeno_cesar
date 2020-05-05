@@ -71,7 +71,7 @@ class LogoutEndpoint(Resource):
     @metrics_req_in_progress.track_inprogress()
     def post(self):
         jti = get_raw_jwt()['jti']
-        tokens_blacklist.setex(name=jti, time=app_conf.access_expires, value=jti)
+        tokens_blacklist.setex(name=jti, time=app_conf.JWT_ACCESS_TOKEN_EXPIRES, value=jti)
         metrics_req_count.labels(method='POST', endpoint='/logout2', status_code='200').inc()
         return {"message": "Successfully logged out2"}, 200
 
@@ -86,7 +86,7 @@ class LogoutRefreshEndpoint(Resource):
     @metrics_req_in_progress.track_inprogress()
     def post(self):
         jti = get_raw_jwt()['jti']
-        tokens_blacklist.setex(name=jti, time=app_conf.refresh_expires, value=jti)
+        tokens_blacklist.setex(name=jti, time=app_conf.JWT_REFRESH_TOKEN_EXPIRES, value=jti)
         metrics_req_count.labels(method='POST', endpoint='/logout', status_code='200').inc()
         return {"message": "Successfully logged out"}, 200
 

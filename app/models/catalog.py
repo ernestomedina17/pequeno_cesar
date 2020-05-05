@@ -232,13 +232,13 @@ class Catalog:
 
         # noinspection PyTypeChecker
         User.get_or_create(
-            {"name": user_name.read(),
-             "password": user_pass.read()})
+            {"name": user_name.read().strip(),
+             "password": user_pass.read().strip()})
 
         # noinspection PyTypeChecker
         Administrator.get_or_create(
-            {"name": admin_name.read(),
-             "password": admin_pass.read()})
+            {"name": admin_name.read().strip(),
+             "password": admin_pass.read().strip()})
 
         user_name.close()
         user_pass.close()
