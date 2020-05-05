@@ -225,14 +225,24 @@ class Catalog:
     @metrics_query_latency.time()
     @metrics_query_in_progress.track_inprogress()
     def load_users(cls):
+        user_name = open("/run/secrets/default_app_user_name", "r")
+        user_pass = open("/run/secrets/default_app_user_password", "r")
+        admin_name = open("/run/secrets/default_app_admin_name", "r")
+        admin_pass = open("/run/secrets/default_app_admin_password", "r")
+
         # noinspection PyTypeChecker
         User.get_or_create(
-            {"name": "eduardo",
-             "password": "myUserPassword123"})
+            {"name": user_name.read(),
+             "password": user_pass.read()})
 
         # noinspection PyTypeChecker
         Administrator.get_or_create(
-            {"name": "ernesto",
-             "password": "myAdminPassword123"})
+            {"name": admin_name.read(),
+             "password": admin_pass.read()})
+
+        user_name.close()
+        user_pass.close()
+        admin_name.close()
+        admin_pass.close()
 
         metrics_query_count.labels(object='Catalog', method='load_users').inc()

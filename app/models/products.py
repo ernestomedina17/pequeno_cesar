@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from neomodel import (db, StructuredNode, StringProperty, IntegerProperty, FloatProperty, ArrayProperty,
                       RelationshipTo, RelationshipFrom, StructuredRel)
 from metrics import metrics_query_latency, metrics_query_in_progress, metrics_query_count

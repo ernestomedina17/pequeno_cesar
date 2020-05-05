@@ -1,10 +1,16 @@
-version: '3'
+version: '3.8'
 services:
   pequeno_cesar:
     environment:
-      - APP_MODE=dev
-      - NEO4J_DB_PASSWORD
-      - JWT_SECRET_KEY
+      - APP_MODE=${APP_MODE:?err}
+    secrets:
+      - neo4j_db_user
+      - neo4j_db_password
+      - default_app_user_name
+      - default_app_user_password
+      - default_app_admin_name
+      - default_app_admin_password
+      - jwt_secret_key
     build: .
     ports:
       - "5000:5000"
@@ -20,8 +26,9 @@ services:
     ports:
       - "172.17.0.1:7474:7474"
       - "172.17.0.1:7687:7687"
+    # TODO: Use secrets instead of NEO4J_AUTH env variable
     environment:
-      - NEO4J_AUTH
+      - NEO4J_AUTH=${NEO4J_AUTH:?err}
       - NEO4J_dbms_memory_pagecache_size=2G
       - NEO4J_dbms_memory_heap_max__size=2G
   prometheus:
@@ -31,8 +38,29 @@ services:
       - "172.17.0.1:9090:9090"
     volumes:
     - "./prometheus:/etc/prometheus"
+    depends_on:
+      - pequeno_cesar
   grafana:
     # user:admin, password:admin
     image: "grafana/grafana:6.7.3"
     ports:
       - "172.17.0.1:3000:3000"
+    depends_on:
+      - pequeno_cesar
+
+# Set file permissions to 440
+secrets:
+  neo4j_db_user:
+    file: ~/neo4j_db_user.txt
+  neo4j_db_password:
+    file: ~/neo4j_db_password.txt
+  default_app_user_name:
+    file: ~/default_app_user_name.txt
+  default_app_user_password:
+    file: ~/default_app_user_password.txt
+  default_app_admin_name:
+    file: ~/default_app_admin_name.txt
+  default_app_admin_password:
+    file: ~/default_app_admin_password.txt
+  jwt_secret_key:
+    file: ~/jwt_secret_key.txt
