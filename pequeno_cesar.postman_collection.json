@@ -137,7 +137,6 @@
 							"    pm.expect(jsonData.fresh_token !== undefined).to.be.true;",
 							"    pm.environment.set(\"fresh_token\", jsonData.fresh_token);",
 							"});",
-							"",
 							""
 						],
 						"type": "text/javascript"
@@ -155,7 +154,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"eduardo\",\n\t\"password\": \"myUserPassword123\"\n}"
+					"raw": "{\n\t\"username\": \"{{default_app_user_name}}\",\n\t\"password\": \"{{default_app_user_password}}\"\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -925,7 +924,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"ernesto\",\n\t\"password\": \"myAdminPassword123\"\n}"
+					"raw": "{\n\t\"username\": \"{{default_app_admin_name}}\",\n\t\"password\": \"{{default_app_admin_password}}\"\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
