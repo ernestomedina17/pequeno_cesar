@@ -4,12 +4,6 @@ ENV APP_HOME=/app \
     APP_GROUP=pequeno \
     APP_USER=cesar \
     prometheus_multiproc_dir=metrics
-    ### WARNING: Pass these variables at run time or the container will fail to start
-    # APP_MODE; String Values may be: "dev", "test" or "prod"
-    # TODO: Implement the below as secrets instead of ENV Variables
-    # JWT_SECRET_KEY; Is a string to encrypt tokens
-    # NEO4J_DB_PASSWORD; Is neo4j's password string
-
 
 COPY app "${APP_HOME}"
 
