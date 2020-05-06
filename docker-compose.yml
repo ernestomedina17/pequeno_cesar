@@ -42,7 +42,7 @@ services:
     depends_on:
       - pequeno_cesar
   grafana:
-    # user:admin, password:admin
+    # http://172.17.0.1:3000  ->  user:admin, password:admin
     image: "grafana/grafana:6.7.3"
     ports:
       - "172.17.0.1:3000:3000"
