@@ -18,6 +18,8 @@ In order to successfully start the container you need to set:
   - default_app_admin_password; string
   - jwt_secret_key; string
 
+Check out the **docker-compose.yml** for details.
+
 # Postman Test
 In order to successfully run the Postman test you need to set these variables in Postman:
 - host: 172.17.0.1:5000
@@ -29,8 +31,6 @@ In order to successfully run the Postman test you need to set these variables in
 - default_app_user_password: must match the value of the secret with the same name.
 - default_app_admin_name: must match the value of the secret with the same name.
 - default_app_admin_password: must match the value of the secret with the same name.
-
-Check out the **docker-compose.yml** for details.
 
 # Prometheus and Grafana
 Prometheus and Grafana are configured via docker-compose volumes.
