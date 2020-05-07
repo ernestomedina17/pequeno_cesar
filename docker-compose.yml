@@ -46,6 +46,8 @@ services:
     image: "grafana/grafana:6.7.3"
     ports:
       - "172.17.0.1:3000:3000"
+    volumes:
+    - "./grafana:/usr/share/grafana/conf/provisioning"
     depends_on:
       - pequeno_cesar
 

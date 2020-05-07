@@ -1,4 +1,4 @@
-# pequeno_cesar
+# Pequeno Cesar
 This is a POC project to test Flask REST API with Neo4j DB using neomodel OGM lib.  
 Jwt_extended provides Bearer tokens and redis blacklist your token when you logout.  
 Gunicorn and Docker are used to serve the app. 
@@ -30,3 +30,5 @@ In order to successfully run the Postman test you need to set these variables in
 - default_app_admin_name: must match the value of the secret with the same name.
 - default_app_admin_password: must match the value of the secret with the same name.
 
+# Prometheus and Grafana
+Prometheus and Grafana are configured via docker-compose volumes.
