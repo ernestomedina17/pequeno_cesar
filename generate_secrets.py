@@ -3,21 +3,20 @@ import base64
 import os
 
 # Generate a Key and save it
-key = Fernet.generate_key()
-key_encoded = base64.b64encode(key)
-
+key = Fernet.generate_key()  # type: binary
 f = open(os.path.expanduser('~/cesar_key'), 'wb')
-f.write(key_encoded)
+f.write(key)
 f.close()
+os.chmod(os.path.expanduser('~/cesar_key'), 0o640)
 
 # Binary Files
 file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'wb')
-file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.txt'), 'wr')
-file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'wr')
-file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'wr')
-file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'wr')
-file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'wr')
-file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.txt'), 'wr')
+file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.txt'), 'wb')
+file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'wb')
+file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'wb')
+file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'wb')
+file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'wb')
+file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.txt'), 'wb')
 
 # Get your secrets input
 # TODO: Customize the neo4j container to be able to have a user name different from neo4j
@@ -40,14 +39,13 @@ encoded_jwt_secret_key = base64.b64encode(bytes(jwt_secret_key, 'utf-8'))
 
 # Encrypt the encoded secrets with the key
 f = open(os.path.expanduser('~/cesar_key'), 'rb')
-f.read()
-decoded_key = base64.b64decode(f, 'utf-8').decode()
+key0 = f.read()
 f.close()
 
-if key == decoded_key:
+if key == key0:
     print("Encrypting your secrets...")
 else:
-    print("You failed as a programmer")
+    print("You failed as programmer")
 
 fer = Fernet(key)
 encrypted_neo4j_db_user = fer.encrypt(encoded_neo4j_db_user)
