@@ -3,11 +3,11 @@ import base64
 import os
 
 # Generate a Key and save it
-key = Fernet.generate_key()  # type: binary
+key = Fernet.generate_key()
 f = open(os.path.expanduser('~/cesar_key'), 'wb')
 f.write(key)
 f.close()
-os.chmod(os.path.expanduser('~/cesar_key'), 0o640)
+os.chmod(os.path.expanduser('~/cesar_key'), 0o440)
 
 # Binary Files
 file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'wb')
@@ -119,3 +119,12 @@ assert default_app_user_password == decoded_default_app_user_password, 'you fail
 assert default_app_admin_name == decoded_default_app_admin_name, 'you failed as programmer'
 assert default_app_admin_password == decoded_default_app_admin_password, 'you failed as programmer'
 assert jwt_secret_key == decoded_jwt_secret_key, 'you failed as programmer'
+
+# Screw Windows
+os.chmod(os.path.expanduser('~/neo4j_db_user.txt'), 0o440)
+os.chmod(os.path.expanduser('~/neo4j_db_password.txt'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_user_name.txt'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_user_password.txt'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_admin_name.txt'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_admin_password.txt'), 0o440)
+os.chmod(os.path.expanduser('~/jwt_secret_key.txt'), 0o440)
