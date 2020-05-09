@@ -1,22 +1,23 @@
 from cryptography.fernet import Fernet
 import base64
+import os
 
 # Generate a Key and save it
 key = Fernet.generate_key()
 key_encoded = base64.b64encode(key)
 
-f = open("~/cesar_key", "wb")
+f = open(os.path.expanduser('~/cesar_key', 'wr'))
 f.write(key_encoded)
 f.close()
 
 # Binary Files
-file_neo4j_db_user = open("~/neo4j_db_user.txt", "wb")
-file_neo4j_db_password = open("~/neo4j_db_password.txt", "wb")
-file_default_app_user_name = open("~/default_app_user_name.txt", "wb")
-file_default_app_user_password = open("~/default_app_user_password.txt", "wb")
-file_default_app_admin_name = open("~/default_app_admin_name.txt", "wb")
-file_default_app_admin_password = open("~/default_app_admin_password.txt", "wb")
-file_jwt_secret_key = open("~/jwt_secret_key.txt", "wb")
+file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'wb')
+file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.txt'), 'wr')
+file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'wr')
+file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'wr')
+file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'wr')
+file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'wr')
+file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.txt'), 'wr')
 
 # Get your secrets input
 # TODO: Customize the neo4j container to be able to have a user name different from neo4j
@@ -38,7 +39,7 @@ encoded_default_app_admin_password = base64.b64encode(bytes(default_app_admin_pa
 encoded_jwt_secret_key = base64.b64encode(bytes(jwt_secret_key, 'utf-8'))
 
 # Encrypt the encoded secrets with the key
-f = open("~/cesar_key", "rb")
+f = open("~/cesar_key", 'rb')
 f.read()
 decoded_key = base64.b64decode(f, 'utf-8').decode()
 f.close()
@@ -77,22 +78,22 @@ file_jwt_secret_key.close()
 
 # Decryption test from files
 # Secret files
-file_neo4j_db_user = open("~/neo4j_db_user.txt", "rb")
-file_neo4j_db_password = open("~/neo4j_db_password.txt", "rb")
-file_default_app_user_name = open("~/default_app_user_name.txt", "rb")
-file_default_app_user_password = open("~/default_app_user_password.txt", "rb")
-file_default_app_admin_name = open("~/default_app_admin_name.txt", "rb")
-file_default_app_admin_password = open("~/default_app_admin_password.txt", "rb")
-file_jwt_secret_key = open("~/jwt_secret_key.txt", "rb")
+file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'rb')
+file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.txt'), 'rb')
+file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'rb')
+file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'rb')
+file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'rb')
+file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'rb')
+file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.txt'), 'rb')
 
 # Decrypt
-decrypted_neo4j_db_user = fer.dencrypt(file_neo4j_db_user.read())
-decrypted_neo4j_db_password = fer.dencrypt(file_neo4j_db_password.read())
-decrypted_default_app_user_name = fer.dencrypt(file_default_app_user_name.read())
-decrypted_default_app_user_password = fer.dencrypt(file_default_app_user_password.read())
-decrypted_default_app_admin_name = fer.dencrypt(file_default_app_admin_name.read())
-decrypted_default_app_admin_password = fer.dencrypt(file_default_app_admin_password.read())
-decrypted_jwt_secret_key = fer.dencrypt(file_jwt_secret_key.read())
+decrypted_neo4j_db_user = fer.decrypt(file_neo4j_db_user.read())
+decrypted_neo4j_db_password = fer.decrypt(file_neo4j_db_password.read())
+decrypted_default_app_user_name = fer.decrypt(file_default_app_user_name.read())
+decrypted_default_app_user_password = fer.decrypt(file_default_app_user_password.read())
+decrypted_default_app_admin_name = fer.decrypt(file_default_app_admin_name.read())
+decrypted_default_app_admin_password = fer.decrypt(file_default_app_admin_password.read())
+decrypted_jwt_secret_key = fer.decrypt(file_jwt_secret_key.read())
 
 # Base64 Decode
 decoded_neo4j_db_user = base64.b64decode(decrypted_neo4j_db_user)
