@@ -58,14 +58,11 @@ def get_user():
                         required=True,
                         help='A login cannot have a blank password')
 
+    # TODO: Figure out how to send and receive an encrypted password from Postman
     data = parser.parse_args()
-    user = User.find_by_name(data['username'])
-    password = base64.b64decode(bytes(data['password'], 'utf-8'))
-    print('The password "{}", has been printed'.format(password))
-    # To encode:
-    # encoded = base64.b64encode(bytes(mystring, 'utf-8'))
-
     # TODO: Store/Retrieve encrypted passwords from the DB.
+    user = User.find_by_name(data['username'])
+    password = user.password
     if user is None or not safe_str_cmp(user.password, password):
         return None
     return user
