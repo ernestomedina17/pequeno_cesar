@@ -6,7 +6,7 @@ import os
 key = Fernet.generate_key()
 key_encoded = base64.b64encode(key)
 
-f = open(os.path.expanduser('~/cesar_key', 'wr'))
+f = open(os.path.expanduser('~/cesar_key'), 'wr')
 f.write(key_encoded)
 f.close()
 
@@ -39,7 +39,7 @@ encoded_default_app_admin_password = base64.b64encode(bytes(default_app_admin_pa
 encoded_jwt_secret_key = base64.b64encode(bytes(jwt_secret_key, 'utf-8'))
 
 # Encrypt the encoded secrets with the key
-f = open("~/cesar_key", 'rb')
+f = open(os.path.expanduser('~/cesar_key'), 'rb')
 f.read()
 decoded_key = base64.b64decode(f, 'utf-8').decode()
 f.close()
