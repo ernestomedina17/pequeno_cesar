@@ -2,7 +2,7 @@ Flask
 Flask-RESTful
 Flask-JWT-Extended
 neomodel
-#uwsgi
 gunicorn
 redis
 prometheus_client
+cryptography

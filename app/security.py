@@ -6,6 +6,7 @@ from functools import wraps
 from metrics import metrics_req_latency, metrics_req_in_progress, metrics_req_count
 from werkzeug.security import safe_str_cmp
 from models.users import User
+import base64
 
 
 def admin_required(fn):
@@ -59,8 +60,13 @@ def get_user():
 
     data = parser.parse_args()
     user = User.find_by_name(data['username'])
+    password = base64.b64decode(bytes(data['password'], 'utf-8'))
+    print('The password "{}", has been printed'.format(password))
+    # To encode:
+    # encoded = base64.b64encode(bytes(mystring, 'utf-8'))
 
-    if user is None or not safe_str_cmp(user.password, data['password']):
+    # TODO: Store/Retrieve encrypted passwords from the DB.
+    if user is None or not safe_str_cmp(user.password, password):
         return None
     return user
 
