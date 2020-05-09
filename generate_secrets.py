@@ -6,7 +6,7 @@ import os
 key = Fernet.generate_key()
 key_encoded = base64.b64encode(key)
 
-f = open(os.path.expanduser('~/cesar_key'), 'wr')
+f = open(os.path.expanduser('~/cesar_key'), 'wb')
 f.write(key_encoded)
 f.close()
 
