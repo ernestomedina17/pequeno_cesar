@@ -56,18 +56,18 @@ services:
 # Set file permissions to 440
 secrets:
   neo4j_db_user:
-    file: ~/neo4j_db_user.txt
+    file: ~/neo4j_db_user.secret
   neo4j_db_password:
-    file: ~/neo4j_db_password.txt
+    file: ~/neo4j_db_password.secret
   default_app_user_name:
-    file: ~/default_app_user_name.txt
+    file: ~/default_app_user_name.secret
   default_app_user_password:
-    file: ~/default_app_user_password.txt
+    file: ~/default_app_user_password.secret
   default_app_admin_name:
-    file: ~/default_app_admin_name.txt
+    file: ~/default_app_admin_name.secret
   default_app_admin_password:
-    file: ~/default_app_admin_password.txt
+    file: ~/default_app_admin_password.secret
   jwt_secret_key:
-    file: ~/jwt_secret_key.txt
+    file: ~/jwt_secret_key.secret
   encryption_key:
-    file: ~/encryption_key
+    file: ~/encryption_key.secret

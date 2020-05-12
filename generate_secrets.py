@@ -2,21 +2,47 @@ from cryptography.fernet import Fernet
 import base64
 import os
 
+# Check for previous generated Keys and secrets
+if os.path.isfile(os.path.expanduser('~/neo4j_db_user.secret')):
+    os.chmod(os.path.expanduser('~/neo4j_db_user.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/neo4j_db_password.secret')):
+    os.chmod(os.path.expanduser('~/neo4j_db_password.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/default_app_user_name.secret')):
+    os.chmod(os.path.expanduser('~/default_app_user_name.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/default_app_user_password.secret')):
+    os.chmod(os.path.expanduser('~/default_app_user_password.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/default_app_admin_name.secret')):
+    os.chmod(os.path.expanduser('~/default_app_admin_name.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/default_app_admin_password.secret')):
+    os.chmod(os.path.expanduser('~/default_app_admin_password.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/jwt_secret_key.secret')):
+    os.chmod(os.path.expanduser('~/jwt_secret_key.secret'), 0o640)
+
+if os.path.isfile(os.path.expanduser('~/encryption_key.secret')):
+    os.chmod(os.path.expanduser('~/encryption_key.secret'), 0o640)
+
+
 # Generate a Key and save it
 key = Fernet.generate_key()
-f = open(os.path.expanduser('~/encryption_key'), 'wb')
+f = open(os.path.expanduser('~/encryption_key.secret'), 'wb')
 f.write(key)
 f.close()
-os.chmod(os.path.expanduser('~/encryption_key'), 0o440)
+os.chmod(os.path.expanduser('~/encryption_key.secret'), 0o440)
 
 # Binary Files
-file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'wb')
-file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.txt'), 'wb')
-file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'wb')
-file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'wb')
-file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'wb')
-file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'wb')
-file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.txt'), 'wb')
+file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.secret'), 'wb')
+file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.secret'), 'wb')
+file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.secret'), 'wb')
+file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.secret'), 'wb')
+file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.secret'), 'wb')
+file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.secret'), 'wb')
+file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.secret'), 'wb')
 
 # Get your secrets input
 # TODO: Customize the neo4j container to be able to have a user name different from neo4j
@@ -38,7 +64,7 @@ encoded_default_app_admin_password = base64.b64encode(bytes(default_app_admin_pa
 encoded_jwt_secret_key = base64.b64encode(bytes(jwt_secret_key, 'utf-8'))
 
 # Encrypt the encoded secrets with the key
-f = open(os.path.expanduser('~/encryption_key'), 'rb')
+f = open(os.path.expanduser('~/encryption_key.secret'), 'rb')
 key0 = f.read()
 f.close()
 
@@ -76,13 +102,13 @@ file_jwt_secret_key.close()
 
 # Decryption test from files
 # Secret files
-file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'rb')
-file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.txt'), 'rb')
-file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'rb')
-file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'rb')
-file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'rb')
-file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'rb')
-file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.txt'), 'rb')
+file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.secret'), 'rb')
+file_neo4j_db_password = open(os.path.expanduser('~/neo4j_db_password.secret'), 'rb')
+file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.secret'), 'rb')
+file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.secret'), 'rb')
+file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.secret'), 'rb')
+file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.secret'), 'rb')
+file_jwt_secret_key = open(os.path.expanduser('~/jwt_secret_key.secret'), 'rb')
 
 # Decrypt
 decrypted_neo4j_db_user = fer.decrypt(file_neo4j_db_user.read())
@@ -120,11 +146,11 @@ assert default_app_admin_name == decoded_default_app_admin_name, 'you failed as 
 assert default_app_admin_password == decoded_default_app_admin_password, 'you failed as programmer'
 assert jwt_secret_key == decoded_jwt_secret_key, 'you failed as programmer'
 
-# Screw Windows
-os.chmod(os.path.expanduser('~/neo4j_db_user.txt'), 0o440)
-os.chmod(os.path.expanduser('~/neo4j_db_password.txt'), 0o440)
-os.chmod(os.path.expanduser('~/default_app_user_name.txt'), 0o440)
-os.chmod(os.path.expanduser('~/default_app_user_password.txt'), 0o440)
-os.chmod(os.path.expanduser('~/default_app_admin_name.txt'), 0o440)
-os.chmod(os.path.expanduser('~/default_app_admin_password.txt'), 0o440)
-os.chmod(os.path.expanduser('~/jwt_secret_key.txt'), 0o440)
+# Set file permissions
+os.chmod(os.path.expanduser('~/neo4j_db_user.secret'), 0o440)
+os.chmod(os.path.expanduser('~/neo4j_db_password.secret'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_user_name.secret'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_user_password.secret'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_admin_name.secret'), 0o440)
+os.chmod(os.path.expanduser('~/default_app_admin_password.secret'), 0o440)
+os.chmod(os.path.expanduser('~/jwt_secret_key.secret'), 0o440)
