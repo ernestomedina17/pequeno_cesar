@@ -4,10 +4,10 @@ import os
 
 # Generate a Key and save it
 key = Fernet.generate_key()
-f = open(os.path.expanduser('~/cesar_key'), 'wb')
+f = open(os.path.expanduser('~/encryption_key'), 'wb')
 f.write(key)
 f.close()
-os.chmod(os.path.expanduser('~/cesar_key'), 0o440)
+os.chmod(os.path.expanduser('~/encryption_key'), 0o440)
 
 # Binary Files
 file_neo4j_db_user = open(os.path.expanduser('~/neo4j_db_user.txt'), 'wb')
@@ -38,7 +38,7 @@ encoded_default_app_admin_password = base64.b64encode(bytes(default_app_admin_pa
 encoded_jwt_secret_key = base64.b64encode(bytes(jwt_secret_key, 'utf-8'))
 
 # Encrypt the encoded secrets with the key
-f = open(os.path.expanduser('~/cesar_key'), 'rb')
+f = open(os.path.expanduser('~/encryption_key'), 'rb')
 key0 = f.read()
 f.close()
 

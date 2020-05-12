@@ -1,8 +1,10 @@
+import os
+import base64
 from models.products import Pizza, Complement, Drink, Sauce, Package
 from models.users import User, Administrator
 from neomodel import db
 from metrics import metrics_query_count, metrics_query_in_progress, metrics_query_latency
-
+from cryptography.fernet import Fernet
 
 class Catalog:
     @classmethod
@@ -225,24 +227,39 @@ class Catalog:
     @metrics_query_latency.time()
     @metrics_query_in_progress.track_inprogress()
     def load_users(cls):
-        user_name = open("/run/secrets/default_app_user_name", "r")
-        user_pass = open("/run/secrets/default_app_user_password", "r")
-        admin_name = open("/run/secrets/default_app_admin_name", "r")
-        admin_pass = open("/run/secrets/default_app_admin_password", "r")
+        # Encrypted Secret files
+        file_encryption_key = open(os.path.expanduser('~/run/secrets/encryption_key'), 'rb')
+        encryption_key = file_encryption_key.read()
+        file_encryption_key.close()
+        fer = Fernet(encryption_key)
+
+        file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'rb')
+        file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'rb')
+        file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'rb')
+        file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'rb')
+
+        decrypted_default_app_user_name = fer.decrypt(file_default_app_user_name.read())
+        decrypted_default_app_admin_name = fer.decrypt(file_default_app_admin_name.read())
+
+        decoded_default_app_user_name = base64.b64decode(decrypted_default_app_user_name)
+        decoded_default_app_admin_name = base64.b64decode(decrypted_default_app_admin_name)
+
+        decoded_default_app_user_name = decoded_default_app_user_name.decode()
+        decoded_default_app_admin_name = decoded_default_app_admin_name.decode()
 
         # noinspection PyTypeChecker
         User.get_or_create(
-            {"name": user_name.read().strip(),
-             "password": user_pass.read().strip()})
+            {"name": decoded_default_app_user_name.strip(),
+             "password": file_default_app_user_password.read().strip()})
 
         # noinspection PyTypeChecker
         Administrator.get_or_create(
-            {"name": admin_name.read().strip(),
-             "password": admin_pass.read().strip()})
+            {"name": decoded_default_app_admin_name.strip(),
+             "password": file_default_app_admin_password.read().strip()})
 
-        user_name.close()
-        user_pass.close()
-        admin_name.close()
-        admin_pass.close()
+        file_default_app_user_name.close()
+        file_default_app_user_password.close()
+        file_default_app_admin_name.close()
+        file_default_app_admin_password.close()
 
         metrics_query_count.labels(object='Catalog', method='load_users').inc()

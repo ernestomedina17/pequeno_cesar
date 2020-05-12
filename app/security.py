@@ -6,6 +6,7 @@ from functools import wraps
 from metrics import metrics_req_latency, metrics_req_in_progress, metrics_req_count
 from werkzeug.security import safe_str_cmp
 from models.users import User
+from cryptography.fernet import Fernet
 import base64
 
 
@@ -58,12 +59,24 @@ def get_user():
                         required=True,
                         help='A login cannot have a blank password')
 
-    # TODO: Figure out how to send and receive an encrypted password from Postman
     data = parser.parse_args()
-    # TODO: Store/Retrieve encrypted passwords from the DB.
+    file_encryption_key = open("/run/secrets/encryption_key", "rb")
+    encryption_key = file_encryption_key.read()
+    file_encryption_key.close()
+    fer = Fernet(encryption_key)
     user = User.find_by_name(data['username'])
-    password = user.password
-    if user is None or not safe_str_cmp(user.password, password):
+    enc_user_db_password = user.password
+    enc_user_req_password = data['password']
+
+    # Decrypt and Decode base64 and utf-8
+    decrypted_user_db_password = fer.decrypt(enc_user_db_password)
+    decrypted_user_req_password = fer.decrypt(enc_user_req_password)
+    decoded_user_db_password = base64.b64decode(decrypted_user_db_password)
+    decoded_user_req_password = base64.b64decode(decrypted_user_req_password)
+    decoded_user_db_password = decoded_user_db_password.decode()
+    decoded_user_req_password = decoded_user_req_password.decode()
+
+    if user is None or not safe_str_cmp(decoded_user_db_password, decoded_user_req_password):
         return None
     return user
 
