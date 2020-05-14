@@ -18,6 +18,10 @@ In order to successfully start the container you need to set:
   - default_app_admin_password; string
   - jwt_secret_key; string
 
+For your convenience I provide a python script to generate the secrets: 
+
+`python generate_secrets.py`
+
 Check out the **docker-compose.yml** for details.
 
 # Postman Test
