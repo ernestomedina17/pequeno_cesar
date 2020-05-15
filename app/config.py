@@ -41,7 +41,7 @@ def set_app_config():
 class Config(object):
     def __init__(self):
         # Secret files
-        file_encryption_key = open(os.path.expanduser('~/run/secrets/encryption_key'), 'rb')
+        file_encryption_key = open(os.path.expanduser('/run/secrets/encryption_key'), 'rb')
         encryption_key = file_encryption_key.read()
         file_encryption_key.close()
         fer = Fernet(encryption_key)
