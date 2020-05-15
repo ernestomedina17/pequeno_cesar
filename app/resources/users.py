@@ -4,6 +4,22 @@ from security import admin_required
 from werkzeug.security import safe_str_cmp
 from models.users import User, Administrator
 from metrics import metrics_req_latency, metrics_req_in_progress, metrics_req_count
+import base64
+import os
+from cryptography.fernet import Fernet
+
+
+def encrypt_password(password):
+    # Secret files
+    file_encryption_key = open(os.path.expanduser('/run/secrets/encryption_key'), 'rb')
+    encryption_key = file_encryption_key.read()
+    file_encryption_key.close()
+    fer = Fernet(encryption_key)
+
+    encoded_password = base64.b64encode(bytes(password, 'utf-8'))
+    encrypted_password = fer.encrypt(encoded_password)
+
+    return encrypted_password.strip().decode()
 
 
 class UserEndpoint(Resource):
@@ -29,16 +45,14 @@ class UserEndpoint(Resource):
             if user is None:
                 user = Administrator(**data)
             else:
-                # TODO: encrypt the password
-                user.password = data['password']
+                user.password = encrypt_password(data['password'])
 
         elif safe_str_cmp(role, 'consumer'):
             user = User.find_by_name(data['name'])
             if user is None:
                 user = User(**data)
             else:
-                # TODO: encrypt the password
-                user.password = data['password']
+                user.password = encrypt_password(data['password'])
         else:
             metrics_req_count.labels(method='PUT', endpoint='/user', status_code='400').inc()
             return {'message': 'Invalid role name'}, 400
