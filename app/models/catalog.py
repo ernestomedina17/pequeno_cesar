@@ -251,12 +251,12 @@ class Catalog:
         # noinspection PyTypeChecker
         User.get_or_create(
             {"name": decoded_default_app_user_name.strip(),
-             "password": file_default_app_user_password.read().strip()})
+             "password": file_default_app_user_password.read().strip().decode()})
 
         # noinspection PyTypeChecker
         Administrator.get_or_create(
             {"name": decoded_default_app_admin_name.strip(),
-             "password": file_default_app_admin_password.read().strip()})
+             "password": file_default_app_admin_password.read().strip().decode()})
 
         file_default_app_user_name.close()
         file_default_app_user_password.close()
