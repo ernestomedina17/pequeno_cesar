@@ -69,8 +69,8 @@ def get_user():
     enc_user_req_password = data['password']
 
     # Decrypt and Decode base64 and utf-8
-    decrypted_user_db_password = fer.decrypt(bytes(enc_user_db_password))
-    decrypted_user_req_password = fer.decrypt(bytes(enc_user_req_password))
+    decrypted_user_db_password = fer.decrypt(bytes(enc_user_db_password, 'utf-8'))
+    decrypted_user_req_password = fer.decrypt(bytes(enc_user_req_password, 'utf-8'))
     decoded_user_db_password = base64.b64decode(decrypted_user_db_password)
     decoded_user_req_password = base64.b64decode(decrypted_user_req_password)
     decoded_user_db_password = decoded_user_db_password.decode()
