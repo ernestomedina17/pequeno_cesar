@@ -6,7 +6,7 @@ from functools import wraps
 from metrics import metrics_req_latency, metrics_req_in_progress, metrics_req_count
 from werkzeug.security import safe_str_cmp
 from models.users import User
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 import base64
 
 
@@ -65,19 +65,32 @@ def get_user():
     file_encryption_key.close()
     fer = Fernet(encryption_key)
     user = User.find_by_name(data['username'])
-    enc_user_db_password = user.password
-    enc_user_req_password = data['password']
 
-    # Decrypt and Decode base64 and utf-8
-    decrypted_user_db_password = fer.decrypt(bytes(enc_user_db_password, 'utf-8'))
-    decrypted_user_req_password = fer.decrypt(bytes(enc_user_req_password, 'utf-8'))
-    decoded_user_db_password = base64.b64decode(decrypted_user_db_password)
-    decoded_user_req_password = base64.b64decode(decrypted_user_req_password)
-    decoded_user_db_password = decoded_user_db_password.decode()
-    decoded_user_req_password = decoded_user_req_password.decode()
+    if user:
+        enc_user_db_password = user.password
+        enc_user_req_password = data['password']
 
-    if user is None or not safe_str_cmp(decoded_user_db_password, decoded_user_req_password):
+        # Decrypt and Decode base64 and utf-8
+        try:
+            decrypted_user_db_password = fer.decrypt(bytes(enc_user_db_password, 'utf-8'))
+            decrypted_user_req_password = fer.decrypt(bytes(enc_user_req_password, 'utf-8'))
+        except InvalidToken:
+            # TODO: send this to an error log file
+            print('There is a problem while trying to decrypt the user password')
+            return None
+
+        decoded_user_db_password = base64.b64decode(decrypted_user_db_password)
+        decoded_user_req_password = base64.b64decode(decrypted_user_req_password)
+        decoded_user_db_password = decoded_user_db_password.decode()
+        decoded_user_req_password = decoded_user_req_password.decode()
+
+        # if the passwords don't match
+        if not safe_str_cmp(decoded_user_db_password, decoded_user_req_password):
+            return None
+    # if user is None
+    else:
         return None
+    # if passwords matched
     return user
 
 
