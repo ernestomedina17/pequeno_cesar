@@ -6,6 +6,7 @@ from neomodel import db
 from metrics import metrics_query_count, metrics_query_in_progress, metrics_query_latency
 from cryptography.fernet import Fernet
 
+
 class Catalog:
     @classmethod
     @db.transaction
@@ -228,15 +229,15 @@ class Catalog:
     @metrics_query_in_progress.track_inprogress()
     def load_users(cls):
         # Encrypted Secret files
-        file_encryption_key = open(os.path.expanduser('~/run/secrets/encryption_key'), 'rb')
+        file_encryption_key = open('/run/secrets/encryption_key', 'rb')
         encryption_key = file_encryption_key.read()
         file_encryption_key.close()
         fer = Fernet(encryption_key)
 
-        file_default_app_user_name = open(os.path.expanduser('~/default_app_user_name.txt'), 'rb')
-        file_default_app_user_password = open(os.path.expanduser('~/default_app_user_password.txt'), 'rb')
-        file_default_app_admin_name = open(os.path.expanduser('~/default_app_admin_name.txt'), 'rb')
-        file_default_app_admin_password = open(os.path.expanduser('~/default_app_admin_password.txt'), 'rb')
+        file_default_app_user_name = open('/run/secrets/default_app_user_name', 'rb')
+        file_default_app_user_password = open('/run/secrets/default_app_user_password', 'rb')
+        file_default_app_admin_name = open('/run/secrets/default_app_admin_name', 'rb')
+        file_default_app_admin_password = open('/run/secrets/default_app_admin_password', 'rb')
 
         decrypted_default_app_user_name = fer.decrypt(file_default_app_user_name.read())
         decrypted_default_app_admin_name = fer.decrypt(file_default_app_admin_name.read())
