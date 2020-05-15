@@ -8,6 +8,7 @@ An API Test collection is created with Postman.
 In order to successfully start the container you need to set:
 - **Docker Environment variables**:
     - APP_MODE; string, valid values are: 'dev', 'test' or 'prod'
+    - NEO4J_AUTH; string, E.g. 'neo4j/my$ecret'
 
 - **Docker Secrets**: The app will expect them to be at /run/secrets/<secret_name>
   - neo4j_db_user; 'neo4j'
