@@ -14,5 +14,9 @@ errors = {
     'ServiceUnavailable': {
         'message': "Backend services are not ready",
         'status': 500,
+    },
+    'InvalidToken': {
+        'message': "Status code is 401 UNAUTHORIZED",
+        'status': 401,
     }
 }

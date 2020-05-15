@@ -79,6 +79,7 @@ class Config(object):
         self.JWT_BLACKLIST_ENABLED = True
         self.JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
         self.JWT_SECRET_KEY = decoded_jwt_secret_key.strip()
+        # TODO: implement some try/except blocks to handle neo4j or redis being down or not available.
         self.PROPAGATE_EXCEPTIONS = True
         self.REDIS_DB_SERVER = '172.17.0.1'
         self.NEO4J_DB_SERVER = '172.17.0.1'
