@@ -29,6 +29,7 @@ class UserEndpoint(Resource):
             if user is None:
                 user = Administrator(**data)
             else:
+                # TODO: encrypt the password
                 user.password = data['password']
 
         elif safe_str_cmp(role, 'consumer'):
@@ -36,6 +37,7 @@ class UserEndpoint(Resource):
             if user is None:
                 user = User(**data)
             else:
+                # TODO: encrypt the password
                 user.password = data['password']
         else:
             metrics_req_count.labels(method='PUT', endpoint='/user', status_code='400').inc()
