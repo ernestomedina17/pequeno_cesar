@@ -11,7 +11,7 @@ RUN addgroup --system "${APP_GROUP}" -g 1000 && adduser --system --no-create-hom
     --ingroup "${APP_GROUP}" -s /bin/busybox -u 1000 "${APP_USER}" \
     && chown -R "${APP_USER}":"${APP_GROUP}" "${APP_HOME}" \
     && chmod -R 750 "${APP_HOME}" \
-#    && apk add python3-dev build-base linux-headers pcre-dev \
+#    && apk add python3-dev build-base linux-headers pcre-dev gcc musl-dev libffi-dev openssl-dev \
     && pip install -U pip \
     && pip install -r "${APP_HOME}"/requirements.txt
 
