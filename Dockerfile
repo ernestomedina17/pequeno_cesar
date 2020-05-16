@@ -14,6 +14,8 @@ RUN addgroup --system "${APP_GROUP}" -g 1000 && adduser --system --no-create-hom
     && apk add python3-dev build-base linux-headers pcre-dev gcc musl-dev libffi-dev openssl-dev \
     && pip install -U pip \
     && pip install -r "${APP_HOME}"/requirements.txt
+    # TODO: current image size is 406MB, clean some cache to make it smaller
+    # TODO: split this RUN command in two to enhance the build efficiency when only adding new python code
 
 EXPOSE 5000/tcp
 USER "${APP_USER}":"${APP_GROUP}"
