@@ -75,8 +75,6 @@ def get_user():
             decrypted_user_db_password = fer.decrypt(bytes(enc_user_db_password, 'utf-8'))
             decrypted_user_req_password = fer.decrypt(bytes(enc_user_req_password, 'utf-8'))
         except InvalidToken:
-            # TODO: send this to an error log file
-            print('There is a problem while trying to decrypt the user password')
             return None
 
         decoded_user_db_password = base64.b64decode(decrypted_user_db_password)

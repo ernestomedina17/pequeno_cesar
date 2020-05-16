@@ -43,14 +43,14 @@ class UserEndpoint(Resource):
         if safe_str_cmp(role, 'admin'):
             user = Administrator.find_by_name(data['name'])
             if user is None:
-                user = Administrator(**data)
+                user = Administrator(name=data['name'], password=encrypt_password(data['password']))
             else:
                 user.password = encrypt_password(data['password'])
 
         elif safe_str_cmp(role, 'consumer'):
             user = User.find_by_name(data['name'])
             if user is None:
-                user = User(**data)
+                user = User(name=data['name'], password=encrypt_password(data['password']))
             else:
                 user.password = encrypt_password(data['password'])
         else:
@@ -60,7 +60,7 @@ class UserEndpoint(Resource):
         user.save_to_db()
         user.refresh()
         metrics_req_count.labels(method='PUT', endpoint='/user', status_code='200').inc()
-        return user.json(), 200
+        return user.json_full(), 200
 
     @admin_required
     @fresh_jwt_required

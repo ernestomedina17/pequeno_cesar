@@ -37,6 +37,12 @@ class User(StructuredNode):
         metrics_query_count.labels(object=type(self).__name__, method='json').inc()
         return {'name': self.name}
 
+    @metrics_query_latency.time()
+    @metrics_query_in_progress.track_inprogress()
+    def json_full(self):
+        metrics_query_count.labels(object=type(self).__name__, method='json').inc()
+        return {'name': self.name, 'password': self.password}
+
 
 class Administrator(User):
     @classmethod
