@@ -61,7 +61,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"eduardo\",\n\t\"password\": \"asdf\"\n}"
+					"raw": "{\n\t\"username\": \"eduardo\",\n\t\"password\": \"asdf\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -104,7 +107,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"eduardoX\",\n\t\"password\": \"asdf\"\n}"
+					"raw": "{\n\t\"username\": \"eduardoX\",\n\t\"password\": \"asdf\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -154,7 +160,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"{{default_app_user_name}}\",\n\t\"password\": \"{{default_app_user_password}}\"\n}"
+					"raw": "{\n\t\"username\": \"{{default_app_user_name}}\",\n\t\"password\": \"{{default_app_user_password}}\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -309,7 +318,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -364,7 +376,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -419,7 +434,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Combo\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Combo\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Package",
@@ -474,7 +492,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Paquete Fiesta\"\n}"
+					"raw": "{\n\t\"name\": \"Paquete Fiesta\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Package",
@@ -571,7 +592,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Medina\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Medina\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -623,7 +647,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Medina\",\n\t\"price\": 199, \n\t\"ingredients\": [\"pepperoni\", \"orilla de chicharrón de queso\", \"tocino\"],\n\t\"form\": \"CUADRADA\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Medina\",\n\t\"price\": 199, \n\t\"ingredients\": [\"pepperoni\", \"orilla de chicharrón de queso\", \"tocino\"],\n\t\"form\": \"CUADRADA\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -676,7 +703,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -871,7 +901,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Crunch\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -924,7 +957,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"{{default_app_admin_name}}\",\n\t\"password\": \"{{default_app_admin_password}}\"\n}"
+					"raw": "{\n\t\"username\": \"{{default_app_admin_name}}\",\n\t\"password\": \"{{default_app_admin_password}}\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -1077,7 +1113,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Medina\",\n\t\"price\": 199, \n\t\"ingredients\": [\"pepperoni\", \"orilla de chicharrón de queso\", \"tocino\"],\n\t\"form\": \"REDONDA\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Medina\",\n\t\"price\": 199, \n\t\"ingredients\": [\"pepperoni\", \"orilla de chicharrón de queso\", \"tocino\"],\n\t\"form\": \"REDONDA\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -1133,7 +1172,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Medina\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Medina\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -1188,7 +1230,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Ultra Big\"\n}"
+					"raw": "{\n\t\"name\": \"Ultra Big\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Package",
@@ -1240,7 +1285,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Crazy Medina\"\n}"
+					"raw": "{\n\t\"name\": \"Crazy Medina\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Pizza",
@@ -1292,7 +1340,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Ultra Big\"\n}"
+					"raw": "{\n\t\"name\": \"Ultra Big\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Package",
@@ -1353,7 +1404,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Ultra Big\"\n}"
+					"raw": "{\n\t\"name\": \"Ultra Big\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Package",
@@ -1405,7 +1459,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Ultra Big\",\n    \"units\": 1,\n    \"price\": 450,\n    \"pizzas\": [\"3 MEAT TREAT\", \"HULA HAWAIIAN\"],\n    \"complements\": [\"Crazy Bread\"],\n    \"drinks\": [\"Pepsi\", \"Mirinda\", \"Manzana\"],\n    \"sauces\": [\"Crazy Sauce\"]\n}"
+					"raw": "{\n\t\"name\": \"Ultra Big\",\n    \"units\": 1,\n    \"price\": 450,\n    \"pizzas\": [\"3 MEAT TREAT\", \"HULA HAWAIIAN\"],\n    \"complements\": [\"Crazy Bread\"],\n    \"drinks\": [\"Pepsi\", \"Mirinda\", \"Manzana\"],\n    \"sauces\": [\"Crazy Sauce\"]\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/product/Package",
@@ -1436,7 +1493,14 @@
 							"",
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
+							"});",
+							"",
+							"pm.test(\"Password is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.password !== undefined).to.be.true;",
+							"    pm.environment.set(\"consumer_password\", jsonData.password);",
+							"});",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -1458,7 +1522,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Tom Hanks\",\n    \"password\": \"asdf1234\"\n}"
+					"raw": "{\n\t\"name\": \"Tom Hanks\",\n    \"password\": \"asdf1234\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/user/consumer",
@@ -1489,7 +1556,14 @@
 							"",
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
+							"});",
+							"",
+							"pm.test(\"Password is not empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.password !== undefined).to.be.true;",
+							"    pm.environment.set(\"admin_password\", jsonData.password);",
+							"});",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -1511,7 +1585,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Al Pacino\",\n    \"password\": \"1234asdf\"\n}"
+					"raw": "{\n\t\"name\": \"Al Pacino\",\n    \"password\": \"1234asdf\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/user/admin",
@@ -1569,7 +1646,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Tom Hanks\"\n}"
+					"raw": "{\n\t\"name\": \"Tom Hanks\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/user/consumer",
@@ -1625,7 +1705,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Al Pacino\"\n}"
+					"raw": "{\n\t\"name\": \"Al Pacino\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/user/admin",
@@ -1679,7 +1762,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"Tom Hanks\",\n\t\"password\": \"asdf1234\"\n}"
+					"raw": "{\n\t\"username\": \"Tom Hanks\",\n\t\"password\": \"{{consumer_password}}\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -1780,7 +1866,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"Al Pacino\",\n\t\"password\": \"1234asdf\"\n}"
+					"raw": "{\n\t\"username\": \"Al Pacino\",\n\t\"password\": \"{{admin_password}}\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/login",
@@ -1880,7 +1969,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Tom Hanks\"\n}"
+					"raw": "{\n\t\"name\": \"Tom Hanks\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/user/consumer",
@@ -1932,7 +2024,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Al Pacino\"\n}"
+					"raw": "{\n\t\"name\": \"Al Pacino\"\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "http://{{host}}/user/admin",
